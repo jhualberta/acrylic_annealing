@@ -9,6 +9,9 @@
 ## pip install scipy
 ## pip install matplotlib
 ## pip install xlrd
+## Disclaimer: The values from this code should be carefully considered by the users.
+## The author is not responsible for any damage caused by the actual operations.
+
 import os
 import pandas as pd
 import numpy as np
@@ -18,12 +21,19 @@ import matplotlib.pyplot as plt
 import statistics as stat
 
 inch_to_mm = 25.4 # mm/inch
-##NOTE: turn on this tag, we will always use the thicker data value than we input
-is_conservative = True
 
 def fahrenheit_to_celsius(fahrenheit):
     return (fahrenheit - 32.)*5./9
 
+### NOTE: for the temperature change, don't need to subtract 32*5./9 !!
+def fahrenheit_to_celsius_rate(fahrenheit):
+    return (fahrenheit)*5./9
+
+def celsius_to_fahrenheit_rate(celsius):
+    return (celsius)*9./5
+
+##NOTE: turn on this tag, we will always use the thicker data value than we input
+is_conservative = True
 def find_closest_index( input_value, list_vals ):
     # Convert the list to a numpy array
     array_vals = np.array(list_vals)
@@ -41,34 +51,79 @@ current_dir = os.getcwd()
 file_name = 'StachiwTable.csv'
 file_path = os.path.join(current_dir, file_name)
 
+#file_name = 'StachiwTable.csv'
+#file_path = os.path.join(current_dir, file_name)
+#
+#file_name = 'StachiwTable.csv'
+#file_path = os.path.join(current_dir, file_name)
+
 # Read the Excel file, skipping the first 3 rows
 df = pd.read_csv(file_path, skiprows=2, skipfooter=3,engine='python')
 
+#df = pd.read_csv(file_path, skiprows=2, skipfooter=3,engine='python')
+#df = pd.read_csv(file_path, skiprows=2, skipfooter=3,engine='python')
+#df = pd.read_csv(file_path, skiprows=2, skipfooter=3,engine='python')
+
 # Display the dataframe
 # print(df)
+
+print("*************************************")
+print("Set the mode (conservative or fast)") 
+print("------- choose the mode carefully -------")
+print("press 0: conservative mode (by default)") 
+print("press 1: fast (energy-save) mode")
+choice_mode = input("press:")
+run_mode = 0 # conservative mode by default
+if choice_mode == 0:
+   print("Set to conservative mode (by default)") 
+   run_mode = choice_mode
+elif choice_mode == 1:
+   print("Set to fast mode. Warning: use the rate close to the maximum rate, be careful.")
+   run_mode = 1 
+elif choice_mode == "":
+   print("Use conservative mode (by default)")
+   run_mode = 0
+else:
+   print("Use conservative mode (by default)")
+   run_mode = 0
+
+print("*************************************")
 print(u"Set the room/ambient temperature (27 \N{DEGREE SIGN}C as default):")
 print("------- choose the season -------")
-print(u"press 1 for spring/autumn (20\N{DEGREE SIGN}C)")
-print(u"press 2 for summer (30\N{DEGREE SIGN}C)")
-print(u"press 3 for winter (5\N{DEGREE SIGN}C)")
-print(u"press enter as default (27\N{DEGREE SIGN}C)")
-choice = input("press:")
-room_temp = 27
-if choice == 1:
+print(u"press \'enter\': default (27\N{DEGREE SIGN}C)")
+print(u"press \'a\': spring/autumn (20\N{DEGREE SIGN}C)")
+print(u"press \'b\': summer (30\N{DEGREE SIGN}C)")
+print(u"press \'c\': winter (5\N{DEGREE SIGN}C)")
+print(u"or enter a temperature value: (in \N{DEGREE SIGN}C)")
+choice_temp = input("press:")
+room_temp = 27 ## default value
+if choice_temp == 'a':
    room_temp = 20
-elif choice == 2:
+   print(u"room temperature is set to 20\N{DEGREE SIGN}C for spring/autumn")
+elif choice_temp == 'b':
    room_temp = 30
-elif choice == 3:
+   print(u"room temperature is set to 30\N{DEGREE SIGN}C for summer")
+elif choice_temp == 'c':
    room_temp = 5
-elif choice =="":
+   print(u"room temperature is set to 5\N{DEGREE SIGN}C for winter")
+elif choice_temp =="":
    print(u"room temperature is set to 27\N{DEGREE SIGN}C by default")  
 else:
-   print(u"room temperature is set to 27\N{DEGREE SIGN}C by default")
+   room_temp = int(choice_temp) 
+   print("room temperature is set to", room_temp, u"\N{DEGREE SIGN}C.")
+
+print("*************************************")
+print(u"Set the annealing cycle")
+print("------- choose the cycle -------")
+print("press 1: cycle 1 (table 15.1) NORMALIZING SCHEDULE FOR ACRYLIC CASTINGS, single-layer before machining)")
+print("press 2: cycle 2 ( ")
+print("press 3: cycle 3 (laminated-layer after machining)") 
+cycle_choice= input("press:")
 
 thickness = float(input("Enter acrylic thickness in mm: "))
 list_thickness = df.iloc[:, 1].tolist()
 list_max_heatingRate = df.iloc[:, 2].tolist()
-list_risetime_to140degC = df.iloc[:, 3].tolist()
+list_min_risetime_to140degC = df.iloc[:, 3].tolist()
 list_holdtime_at140degC = df.iloc[:, 4].tolist() 
 list_coolingRate_to110degC = df.iloc[:, 5].tolist()
 list_decreasetime_to110degC = df.iloc[:, 6].tolist()
@@ -97,27 +152,48 @@ if is_conservative:
 print("Extract the curve for "+ str( round(list_thickness[row_index],1) ) + "mm") 
 
 max_heatingRate = list_max_heatingRate[row_index] 
-max_heatingRate_degC = abs(fahrenheit_to_celsius(max_heatingRate))
+max_heatingRate_degC = abs(fahrenheit_to_celsius_rate(max_heatingRate))
 max_heatingRate_degC_minutes = max_heatingRate_degC/60
+suggest_heatingRate_degC = floor(max_heatingRate_degC/10)*10
+#NOTE: our fast mode value is already lower than the maximum value
+fast_heatingRate_degC = floor(max_heatingRate_degC/2)*2
+heatingRate_degC = suggest_heatingRate_degC
+if run_mode == 1:
+    heatingRat_degC = fast_heatingRate_degC
+min_risetime_to140degC   = list_min_risetime_to140degC[row_index]
 
-risetime_to140degC       = list_risetime_to140degC[row_index]
+actual_risetime_to140degC = heatingRate_degC*(140. - room_temp) 
+
 holdtime_at140degC       = list_holdtime_at140degC[row_index]      
 coolingRate_to230F       = list_coolingRate_to110degC[row_index]
-coolingRate_to110degC    = fahrenheit_to_celsius(coolingRate_to230F) 
+coolingRate_to110degC    = fahrenheit_to_celsius_rate(coolingRate_to230F) 
 decreasetime_to110degC   = list_decreasetime_to110degC[row_index]
 holdtime_at110degC       = list_holdtime_at110degC[row_index]      
 max_coolingRate_to80F    = list_max_coolingRate_to27degC[row_index]
-max_coolingRate_to27degC = fahrenheit_to_celsius(max_coolingRate_to80F)
+max_coolingRate_to27degC = fahrenheit_to_celsius_rate(max_coolingRate_to80F)
 decreasetime_to27degC    = list_decreasetime_to27degC[row_index]
 totaltime                = list_totaltime[row_index]
-print(u"Note: the numbers below are for room temperature 27\N{DEGREE SIGN}C")
+print(u"Note: the values in Stachiw's tables are for the default room temperature 27\N{DEGREE SIGN}C")
+print("----------------------------------------------------------------")
+print(u"Max oven heating rate to 140\N{DEGREE SIGN}C (value in table):")
+print( str(round(max_heatingRate_degC,2)) + u"\N{DEGREE SIGN}C/hour; or " + str(round(max_heatingRate_degC_minutes,2)) + u"\N{DEGREE SIGN}C/minute" 
++ " or "+str(round(max_heatingRate,2)) + u"\N{DEGREE SIGN}F/hour")
+if run_mode == 1:
+    print(u"Fast (energy-save) oven heating rate to 140\N{DEGREE SIGN}C:")
+else:
+    print(u"Suggested conservative oven heating rate to 140\N{DEGREE SIGN}C:")
+print( str(round(heatingRate_degC,2)) + u"\N{DEGREE SIGN}C/hour; or " + str(round(heatingRate_degC/60,2)) + u"\N{DEGREE SIGN}C/minute or "
++ str(round( celsius_to_fahrenheit_rate(heatingRate_degC), 2)) + u"\N{DEGREE SIGN}F/hour" )
+
 print("----------------------------------")
-print(u"Max oven heating rate to 140\N{DEGREE SIGN}C:")
-print( str(round(max_heatingRate_degC,2)) + u"\N{DEGREE SIGN}C/hour; or " + str(round(max_heatingRate_degC_minutes,2)) + u"\N{DEGREE SIGN}C/minute")
-print( "or "+str(round(max_heatingRate,2)) + u"\N{DEGREE SIGN}F/hour")
-print("----------------------------------")
-print(u"Time for heating to 140 \N{DEGREE SIGN}C:")
-print( str(round(risetime_to140degC,2)) + " hours; or " + str(round(risetime_to140degC*60,2)) + " minutes")
+print(u"Time for heating to 140 \N{DEGREE SIGN}C (value in table):")
+print( str(round(min_risetime_to140degC,2)) + " hours; or " + str(round(min_risetime_to140degC*60,2)) + " minutes")
+if run_mode == 1:
+    print(u"Fast/energy save time for heating to 140\N{DEGREE SIGN}C:")
+else:
+    print(u"Suggested/conservative time for heating to 140\N{DEGREE SIGN}C:")
+print(str(round(actual_risetime_to140degC,2)) + " hours; or " + str(round(actual_risetime_to140degC*60,2)) + " minutes")
+
 print("----------------------------------")
 print(u"Hold time at 140 \N{DEGREE SIGN}C:")
 print( str(round(holdtime_at140degC,2)) + " hours; or "+ str(round(holdtime_at140degC*60,2)) + " minutes")
@@ -145,16 +221,15 @@ note_texts = '\n'.join(footnotes.astype(str).tolist())
 print(note_texts)
 
 print("================ Making the plots now ================")
-print("======================================================")
 def stachiwCycle1(t):
-    timeRegion1 = (140. - room_temp)/max_heatingRate_degC #risetime_to140degC
+    timeRegion1 = (140. - room_temp)/max_heatingRate_degC
     timeRegion2 = timeRegion1 + holdtime_at140degC
     timeRegion3 = timeRegion2 + (140. - 110.)/abs(coolingRate_to110degC)
     timeRegion4 = timeRegion3 + holdtime_at110degC
     timeRegion5 = timeRegion4 + (110. - room_temp)/abs(max_coolingRate_to27degC)
     #print(max_heatingRate_degC, coolingRate_to110degC, max_coolingRate_to27degC)
     if 0 <= t<= timeRegion1:
-        return max_heatingRate_degC*t + room_temp
+        return heatingRate_degC*t + room_temp
     elif timeRegion1 < t <= timeRegion2:
         return 140
     elif timeRegion2 < t <= timeRegion3:
@@ -215,7 +290,7 @@ print("insert the python codes below for plotting this curve:")
 print("======================================================")
 print("def stachiwCycle1(t):")
 print("    room_temp = %.f"%room_temp)
-print("    timeRegion1 = (140. - room_temp)/%.f"%max_heatingRate_degC)
+print("    timeRegion1 = (140. - room_temp)/%.f"%heatingRate_degC)
 print("    timeRegion2 = timeRegion1 + %.f ## hold for %.f hours at 140degC"%(holdtime_at140degC,holdtime_at140degC))
 print("    timeRegion3 = timeRegion2 + (140. - 110.)/abs(%.2f)"%coolingRate_to110degC)
 print("    timeRegion4 = timeRegion3 + %.f ## hold for %.f hours at 110degC"%(holdtime_at110degC,holdtime_at110degC))
