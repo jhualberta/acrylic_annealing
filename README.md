@@ -5,6 +5,9 @@ python3 readStachiwTable.py
 It will also print out an example ROOT C++ macro.
 Insert the lines for any ROOT C++ code.
 
+The oven should have a uniform temperature distribution.
+The temperature fluctuation should be within ±2°C
+
 - Example and how it works:
 
 *************************************
