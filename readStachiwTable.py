@@ -48,8 +48,10 @@ def find_closest_index( input_value, list_vals ):
     return idx
 
 current_dir = os.getcwd()
-file_name = 'StachiwTable.csv'
-file_path = os.path.join(current_dir, file_name)
+file_name_15_1 = 'StachiwTable15_1.csv'
+#file_name_15_3 = 'StachiwTable15_3.csv'
+
+file_path = os.path.join(current_dir, file_name_15_1)
 
 #file_name = 'StachiwTable.csv'
 #file_path = os.path.join(current_dir, file_name)
@@ -116,6 +118,7 @@ print("press 1: cycle 1 (table 15.1) NORMALIZING SCHEDULE FOR ACRYLIC CASTINGS, 
 print("press 2: cycle 2 (table 15.)")
 print("press 3: cycle 3 (table 15. , laminated-layer after machining)") 
 cycle_choice = input("press:")
+cycleMode = int(cycle_choice)
 
 thickness = float(input("Enter acrylic thickness in mm: "))
 list_thickness = df.iloc[:, 1].tolist()
@@ -296,9 +299,10 @@ plt.legend()
 savePlotName = "annealingCyle" + cycle_choice + "_" + str(thickness).replace('.','p') + "mm_" + str(room_temp).replace('.','p') +"degC.jpg"
 # Save the plot to a JPG file
 #NOTE: change the plot resolution as needed
-plt.savefig(savePlotName, format='jpg', dpi=200)  # dpi sets the resolution
+#plt.savefig(savePlotName, format='jpg', dpi=200)  # dpi sets the resolution
 plt.show()
 plt.close()  # Close the plot to free up memory
+
 ## print the curve
 #print("insert the python codes below for plotting this curve:")
 #print("======================================================")
