@@ -293,12 +293,12 @@ plt.grid(True, axis='y')
 plt.legend()
 ####plt.xticks(rotation=45)
 #plt.tight_layout()
-plt.show()
 savePlotName = "annealingCyle" + cycle_choice + "_" + str(thickness).replace('.','p') + "mm_" + str(room_temp).replace('.','p') +"degC.jpg"
 # Save the plot to a JPG file
-plt.savefig(savePlotName, format='jpg', dpi=800)  # dpi sets the resolution
+#NOTE: change the plot resolution as needed
+plt.savefig(savePlotName, format='jpg', dpi=200)  # dpi sets the resolution
+plt.show()
 plt.close()  # Close the plot to free up memory
-
 ## print the curve
 #print("insert the python codes below for plotting this curve:")
 #print("======================================================")
