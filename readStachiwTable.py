@@ -115,11 +115,12 @@ print("*************************************")
 print(u"Set the annealing cycle")
 print("------- choose the cycle -------")
 print("press 1: cycle 1 (table 15.1) NORMALIZING SCHEDULE FOR ACRYLIC CASTINGS, single-layer before machining)")
-print("press 2: cycle 2 (table 15.)")
-print("press 3: cycle 3 (table 15. , laminated-layer after machining)") 
+print("press 2: cycle 2 (table 15.1) NORMALIZING SCHEDULE FOR ACRYLIC CASTINGS, laminated layers")
+print("press 3: cycle 3 (table 15.2), laminated-layer after machining)") 
+
 cycle_choice = input("press:")
 cycleMode = int(cycle_choice)
-
+print("!!! Now we are checking with the annealing cycle "+str(cycleMode))
 thickness = float(input("Enter acrylic thickness in mm: "))
 list_thickness = df.iloc[:, 1].tolist()
 list_max_heatingRate = df.iloc[:, 2].tolist()
@@ -206,6 +207,8 @@ else:
     print(u"Suggested/conservative time for heating to 140\N{DEGREE SIGN}C:")
 print(str(round(actual_risetime_to140degC,2)) + " hours; or " + str(round(actual_risetime_to140degC*60,2)) + " minutes")
 
+actual_totaltime = (140. - room_temp)/suggest_heatingRate_degC + holdTime_at140degC + (140. - 110.)/coolingRate_to110degC + holdTime_at110degC + (110. - room_temp)/max_coolingRate_to27degC
+
 print("----------------------------------")
 print(u"Hold time at 140 \N{DEGREE SIGN}C:")
 print( str(round(holdTime_at140degC,2)) + " hours; or "+ str(round(holdTime_at140degC*60,2)) + " minutes")
@@ -224,8 +227,10 @@ print(u"Max cooling rate to room temperature:")
 print( str(round(max_coolingRate_to27degC,2)) + u"\N{DEGREE SIGN}C/hour; or " + str(round(max_coolingRate_to27degC/60,2)) + u"\N{DEGREE SIGN}C/minute") 
 print( "or "+str(round(max_coolingRate_to80F,2)) + u"\N{DEGREE SIGN}F/hour")
 print("----------------------------------")
-print( "Total time expected:")
+print( "Total time expected in Stachiw's table:")
 print( str(totaltime) + " hours; or " + str( round(totaltime*60, 2) )+ " minutes")
+print( "Total time suggested:")
+print( str(actual_totaltime) + " hours; or " + str( round(actual_totaltime*60, 2) )+ " minutes")
 ## print the footnotes
 df_note = pd.read_csv(file_path, skiprows=2)
 footnotes = df_note.tail(3).iloc[:, 0]
@@ -279,10 +284,11 @@ def stachiwCycle3(t):
     else:
         return None
 
-
-time_stachiwCycle1 = np.linspace(0, 100, 10000)
-time_stachiwCycle2 = np.linspace(0, 400, 40000)
-time_stachiwCycle3 = np.linspace(0, 400, 40000)
+endTime = int(actual_totaltime) + 10 # for plotting 
+plotTimeStep  = endTime*100
+time_stachiwCycle1 = np.linspace(0, endTime, plotTimeStep)
+time_stachiwCycle2 = np.linspace(0, endTime, plotTimeStep)
+time_stachiwCycle3 = np.linspace(0, endTime, plotTimeStep)
 
 temperature_stachiwCycle1 = [stachiwCycle1(t) for t in time_stachiwCycle1]
 temperature_stachiwCycle2 = [stachiwCycle2(t) for t in time_stachiwCycle2]

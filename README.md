@@ -8,6 +8,13 @@ Insert the lines for any ROOT C++ code.
 The oven should have a uniform temperature distribution.
 The temperature fluctuation should be within ±2°C
 
+unit conversion:
+1 cm = 0.394 inch, 1 inch = 2.54 cm
+2 cm = 0.787 inch
+2.5 cm = 0.984 inch
+1 psi = 0.070 kg/cm2 = 6.89 kPa
+200 psi = 14 kg/cm2
+
 - Example and how it works:
 
 *************************************
