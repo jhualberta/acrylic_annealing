@@ -2,7 +2,7 @@
 Stachiw acrylic annealing
 
 # Prerequisite
-python version >= 3.1
+python version >= 3.10
 pip install numpy
 pip install pandas
 pip install openpyxl
@@ -18,10 +18,11 @@ The values from this code should be carefully considered by the users.
 The author is not responsible for any damage caused by the actual operations.
 
 # Description
-The excel file: allStachiwTables.csv sheets contain three tables (15.1, 15.3 part A and 15.3 part B.) 
-in Chapter 15 of Statichw's acrylic manual, for the topic of annealing the casting acrylic.
+The excel file: allStachiwTablesCh15.xlsx with sheets contain three tables (15.1, 15.3 part A and 15.3 part B.) 
+taken from Chapter 15 in Statichw's acrylic manual, for the topic of annealing the casting acrylic.
 Table 15.2 is for the thermal shrinking, not yet included.
 This file is saved here as a reference database, and a digitalized copy of the original tables from the book.
+Two pdf files are scanned copies from the book.
 
 The main program, readStachiwTable.py, reads the CSV file `StachiwTable15_1.csv`
 for the annealing cycle 1 and 2; and 
