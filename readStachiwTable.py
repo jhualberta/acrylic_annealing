@@ -11,7 +11,7 @@
 ## pip install xlrd
 ## Disclaimer: The values from this code should be carefully considered by the users.
 ## The author is not responsible for any damage caused by the actual operations.
-
+# -*- coding: utf-8 -*-
 import os
 import pandas as pd
 import numpy as np
@@ -137,7 +137,6 @@ n_data = len(list_thickness)
 
 row_index = 0
 
-print(list_thickness)
 if thickness<=list_thickness[0]:
     print(str(thickness)+"mm is less than the minimum "+str(list_thickness[0])+"mm in Stachiw's database.")
     print("Use the "+str(list_thickness[0])+"mm curve [definitely safe].")
@@ -181,11 +180,10 @@ max_coolingRate_to27degC = fahrenheit_to_celsius_rate(max_coolingRate_to80F)
 decreasetime_to27degC    = list_decreasetime_to27degC[row_index]
 totaltime                = list_totaltime[row_index]
 
-print("!!!!! max_heatingRate_degC",max_heatingRate_degC,"suggested",suggest_heatingRate_degC)
+print("!!!!! max_heatingRate_degC",round(max_heatingRate_degC,3) ,"suggested", round(suggest_heatingRate_degC,3))
 print( 140. - room_temp, heatingRate_degC, actual_risetime_to140degC)
-print("cooling 1", coolingRate_to110degC)
-print("cooling 2", max_coolingRate_to27degC)
-
+print("cooling-to-110degC:", round(coolingRate_to110degC,3))
+print("cooling-to-roomTemp:", round(max_coolingRate_to27degC,3))
 
 print(u"Note: the values in Stachiw's tables are for the default room temperature 27\N{DEGREE SIGN}C")
 print("----------------------------------------------------------------")
@@ -201,6 +199,7 @@ print( str(round(heatingRate_degC,2)) + u"\N{DEGREE SIGN}C/hour; or " + str(roun
 
 print("----------------------------------")
 print(u"Time for heating to 140 \N{DEGREE SIGN}C (value in table):")
+print (round(min_risetime_to140degC,2), round(min_risetime_to140degC*60,2))
 print( str(round(min_risetime_to140degC,2)) + " hours; or " + str(round(min_risetime_to140degC*60,2)) + " minutes")
 
 if run_mode == 1:
