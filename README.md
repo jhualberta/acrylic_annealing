@@ -1,9 +1,36 @@
-# acrylic_annealing
+# acrylic annealing
 Stachiw acrylic annealing
 
+# Prerequisite
+python version >= 3.1
+pip install numpy
+pip install pandas
+pip install openpyxl
+pip install scipy
+pip install matplotlib
+pip install xlrd
+
+for ubuntu user:
+sudo apt-get install libjpeg-dev zlib1g-dev
+
+# Disclaimer: 
+The values from this code should be carefully considered by the users.
+The author is not responsible for any damage caused by the actual operations.
+
+# Description
+The excel file: allStachiwTables.csv sheets contain three tables (15.1, 15.3 part A and 15.3 part B.) 
+in Chapter 15 of Statichw's acrylic manual, for the topic of annealing the casting acrylic.
+Table 15.2 is for the thermal shrinking, not yet included.
+This file is saved here as a reference database, and a digitalized copy of the original tables from the book.
+
+The main program, readStachiwTable.py, reads the CSV file `StachiwTable15_1.csv`
+for the annealing cycle 1 and 2; and 
+
+# To run:
 python3 readStachiwTable.py
-It will also print out an example ROOT C++ macro.
-Insert the lines for any ROOT C++ code.
+
+It will also print out an example ROOT C++ macro and saved as a .C file (plotStachiwCycle1.C for example).
+You can also insert the lines for your ROOT C++ code.
 
 The oven should have a uniform temperature distribution.
 The temperature fluctuation should be within ±2°C
@@ -15,7 +42,7 @@ unit conversion:
 1 psi = 0.070 kg/cm2 = 6.89 kPa
 200 psi = 14 kg/cm2
 
-- Example and how it works:
+# Example and how it works:
 
 *************************************
 Set mode (conservative or fast)

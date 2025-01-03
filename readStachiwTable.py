@@ -1,7 +1,7 @@
 ## Read Stachiw's table, and plot nominal annealing curves according to the input thickness
 ## Author: Jie Hu (jhu9@ualberta.ca)
 ###### prerequisite #####
-## > python 3.1
+## python version >= 3.1
 ## for ubuntu: sudo apt-get install libjpeg-dev zlib1g-dev
 ## pip install numpy
 ## pip install pandas
