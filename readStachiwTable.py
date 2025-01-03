@@ -108,15 +108,15 @@ elif choice_temp == 'c':
 elif choice_temp =="":
    print(u"room temperature is set to 27\N{DEGREE SIGN}C by default")  
 else:
-   room_temp = int(choice_temp) 
+   room_temp = ceil(choice_temp) 
    print("room temperature is set to", room_temp, u"\N{DEGREE SIGN}C.")
 
 print("*************************************")
 print(u"Set the annealing cycle")
 print("------- choose the cycle -------")
 print("press 1: cycle 1 (table 15.1) NORMALIZING SCHEDULE FOR ACRYLIC CASTINGS, single-layer before machining)")
-print("press 2: cycle 2 (table 15.1) NORMALIZING SCHEDULE FOR ACRYLIC CASTINGS, laminated layers")
-print("press 3: cycle 3 (table 15.2), laminated-layer after machining)") 
+print("press 2: cycle 2 (same table 15.1) NORMALIZING SCHEDULE FOR ACRYLIC CASTINGS, laminated layers")
+print("press 3: cycle 3 (table 15.3), laminated-layer after machining)") 
 
 cycle_choice = input("press:")
 cycleMode = int(cycle_choice)
@@ -181,11 +181,11 @@ decreasetime_to27degC    = list_decreasetime_to27degC[row_index]
 totaltime                = list_totaltime[row_index]
 
 print("!!!!! max_heatingRate_degC",round(max_heatingRate_degC,3) ,"suggested", round(suggest_heatingRate_degC,3))
-print( 140. - room_temp, heatingRate_degC, actual_risetime_to140degC)
+#print( 140. - room_temp, heatingRate_degC, actual_risetime_to140degC)
 print("cooling-to-110degC:", round(coolingRate_to110degC,3))
 print("cooling-to-roomTemp:", round(max_coolingRate_to27degC,3))
 
-print(u"Note: the values in Stachiw's tables are for the default room temperature 27\N{DEGREE SIGN}C")
+print(u"Note: the Stachiw's tables assume a default room temperature 27\N{DEGREE SIGN}C; here we use "+ str(room_temp) + "\N{DEGREE SIGN}C.")
 print("----------------------------------------------------------------")
 print(u"Max oven heating rate to 140\N{DEGREE SIGN}C (value in table):")
 print( str(round(max_heatingRate_degC,2)) + u"\N{DEGREE SIGN}C/hour; or " + str(round(max_heatingRate_degC_minutes,2)) + u"\N{DEGREE SIGN}C/minute" 
@@ -199,7 +199,7 @@ print( str(round(heatingRate_degC,2)) + u"\N{DEGREE SIGN}C/hour; or " + str(roun
 
 print("----------------------------------")
 print(u"Time for heating to 140 \N{DEGREE SIGN}C (value in table):")
-print (round(min_risetime_to140degC,2), round(min_risetime_to140degC*60,2))
+#print (round(min_risetime_to140degC,2), round(min_risetime_to140degC*60,2))
 print( str(round(min_risetime_to140degC,2)) + " hours; or " + str(round(min_risetime_to140degC*60,2)) + " minutes")
 
 if run_mode == 1:
@@ -228,10 +228,14 @@ print(u"Max cooling rate to room temperature:")
 print( str(round(max_coolingRate_to27degC,2)) + u"\N{DEGREE SIGN}C/hour; or " + str(round(max_coolingRate_to27degC/60,2)) + u"\N{DEGREE SIGN}C/minute") 
 print( "or "+str(round(max_coolingRate_to80F,2)) + u"\N{DEGREE SIGN}F/hour")
 print("----------------------------------")
-print( "Total time expected in Stachiw's table:")
-print( str(totaltime) + " hours; or " + str( round(totaltime*60, 2) )+ " minutes")
-print( "Total time suggested:")
-print( str(actual_totaltime) + " hours; or " + str( round(actual_totaltime*60, 2) )+ " minutes")
+print("Total time expected in Stachiw's table:")
+print(str(totaltime) + " hours; or " + str( round(totaltime*60, 2) )+ " minutes")
+print("Total time suggested:")
+print(str(round(actual_totaltime,1)) + " hours; or " + str( np.ceil(actual_totaltime*60) )+ " minutes")
+actual_days = actual_totaltime/24
+if actual_totaltime>30:
+    print("or " + str( int(actual_days) ) + " days and " + str( round(actual_totaltime - int(actual_days)*24, 1) ) + " hours.")
+
 ## print the footnotes
 df_note = pd.read_csv(file_path, skiprows=2)
 footnotes = df_note.tail(3).iloc[:, 0]
