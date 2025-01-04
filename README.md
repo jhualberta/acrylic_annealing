@@ -4,18 +4,15 @@ Stachiw acrylic annealing
 # Prerequisite
 python version >= 3.10
 
+install necessary packages:
+```
 pip install numpy
-
 pip install pandas
-
 pip install openpyxl
-
 pip install scipy
-
 pip install matplotlib
-
 pip install xlrd
-
+```
 for ubuntu user:
 
 `sudo apt-get install libjpeg-dev zlib1g-dev`

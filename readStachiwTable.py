@@ -356,74 +356,85 @@ print("plt.legend()")
 print("plt.show()")
 print("")
 
-#print("======================================================")
-#print("insert the root C++ codes below for plotting this curve:")
-#print("======================================================")
-#print("#include <iostream>")
-#print("#include <vector>")
-#print("#include <cmath>")
-#print("#include \"TCanvas.h\"")
-#print("#include \"TGraph.h\"")
-#print("#include \"TAxis.h\"")
-#print("#include \"TLegend.h\"")
-#print("")
-#print("// Function to represent stachiwCycle1")
-#print("double stachiwCycle1(double t) {")
-#print("    double room_temp = 27;")
-#print("    double timeRegion1 = (140.0 - room_temp) / 20.0;")
-#print("    double timeRegion2 = timeRegion1 + 14.0;  // Hold for 14 hours at 140°C")
-#print("    double timeRegion3 = timeRegion2 + (140.0 - 110.0) / std::abs(-13.33);")
-#print("    double timeRegion4 = timeRegion3 + 7.0;   // Hold for 7 hours at 110°C")
-#print("    double timeRegion5 = timeRegion4 + (110.0 - room_temp) / std::abs(-12.22);")
-#print("")
-#print("    if (0 <= t && t <= timeRegion1) {")
-#print("        return 20.0 * t + room_temp;")
-#print("    } else if (timeRegion1 < t && t <= timeRegion2) {")
-#print("        return 140.0;")
-#print("    } else if (timeRegion2 < t && t <= timeRegion3) {")
-#print("        return 140.0 + -13.33 * (t - timeRegion2);")
-#print("    } else if (timeRegion3 < t && t <= timeRegion4) {")
-#print("        return 110.0;")
-#print("    } else if (timeRegion4 <= t && t < timeRegion5) {")
-#print("        return 110.0 + -12.22 * (t - timeRegion4);")
-#print("    } else {")
-#print("        return NAN;  // Return NaN if t is out of bounds")
-#print("    }")
-#print("}")
-#print("")
-#print("void plotStachiwCycle1() {")
-#print("    // Time vectors for the different cycles")
-#print("    int nPoints = 400;")
-#print("    std::vector<double> time_stachiwCycle1(nPoints);")
-#print("    std::vector<double> temperature_stachiwCycle1(nPoints);")
-#print("    ")
-#print("    for (int i = 0; i < nPoints; ++i) {")
-#print("        time_stachiwCycle1[i] = i;  // Fill the time values")
-#print("        temperature_stachiwCycle1[i] = stachiwCycle1(time_stachiwCycle1[i]);")
-#print("    }")
-#print("")
-#print("    // Create canvas")
-#print("    TCanvas *c1 = new TCanvas(\"c1\", \"Annealing Cycle\", 800, 600);")
-#print("")
-#print("    // Create a graph")
-#print("    TGraph *gr1 = new TGraph(nPoints, &time_stachiwCycle1[0], &temperature_stachiwCycle1[0]);")
-#print("    gr1->SetLineStyle(2);  // Dashed line")
-#print("    gr1->SetTitle(\"Annealing Cycle 1, raw single-layer\");")
-#print("    gr1->GetXaxis()->SetTitle(\"Hours\");")
-#print("    gr1->GetYaxis()->SetTitle(\"Temperature (^{#circ}C)\");")
-#print("")
-#print("    // Draw graph")
-#print("    gr1->Draw(\"AL\");  // \"A\" for axes, \"L\" for line")
-#print("")
-#print("    // Grid and legend")
-#print("    c1->SetGridx();")
-#print("    c1->SetGridy();")
-#print("    TLegend *legend = new TLegend(0.6, 0.7, 0.9, 0.9);")
-#print("    legend->AddEntry(gr1, \"Annealing cycle 1, raw single-layer\", \"l\");")
-#print("    legend->Draw();")
-#print("")
-##print("    // Show plot")
-##print("    c1->Update();")
-##print("    c1->Draw();")
-#print("}")
+print("======================================================")
+print("insert the root C++ codes below for plotting this curve:")
+print("======================================================")
+print("run the code by: root plotStachiwCycle.C")
+# File name
+filename_ROOTcode = "plotStachiwCycle.C"
+rootCode_strings = [ 
+"#include <iostream>",
+"#include <vector>",
+"#include <cmath>",
+"#include \"TCanvas.h\"",
+"#include \"TGraph.h\"",
+"#include \"TAxis.h\"",
+"#include \"TLegend.h\"",
+"",
+"// Function to represent stachiwCycle",
+"double stachiwCycle1(double t) {",
+"    double room_temp = 27;",
+"    double timeRegion1 = (140.0 - room_temp) / 30.0;",
+"    double timeRegion2 = timeRegion1 + 14.0;  // Hold for 14 hours at 140degC",
+"    double timeRegion3 = timeRegion2 + (140.0 - 110.0) / std::abs(-13.33);",
+"    double timeRegion4 = timeRegion3 + 7.0;   // Hold for 7 hours at 110degC",
+"    double timeRegion5 = timeRegion4 + (110.0 - room_temp) / std::abs(-12.22);",
+"",
+"    if (0 <= t && t <= timeRegion1) {",
+"        return 20.0 * t + room_temp;",
+"    } else if (timeRegion1 < t && t <= timeRegion2) {",
+"        return 140.0;",
+"    } else if (timeRegion2 < t && t <= timeRegion3) {",
+"        return 140.0 + -13.33 * (t - timeRegion2);",
+"    } else if (timeRegion3 < t && t <= timeRegion4) {",
+"        return 110.0;",
+"    } else if (timeRegion4 <= t && t < timeRegion5) {",
+"        return 110.0 + -12.22 * (t - timeRegion4);",
+"    } else {",
+"        return NAN;  // Return NaN if t is out of bounds",
+"    }",
+"}",
+"",
+"void plotStachiwCycle() {",
+"    // Time vectors for the different cycles",
+"    int nPoints = 400;",
+"    std::vector<double> time_stachiwCycle1(nPoints);",
+"    std::vector<double> temperature_stachiwCycle1(nPoints);",
+"    ",
+"    for (int i = 0; i < nPoints; ++i) {",
+"        time_stachiwCycle1[i] = i;  // Fill the time values",
+"        temperature_stachiwCycle1[i] = stachiwCycle1(time_stachiwCycle1[i]);",
+"    }",
+"",
+"    // Create canvas",
+"    TCanvas *c1 = new TCanvas(\"c1\", \"Annealing Cycle\", 800, 600);",
+"",
+"    // Create a graph",
+"    TGraph *gr1 = new TGraph(nPoints, &time_stachiwCycle1[0], &temperature_stachiwCycle1[0]);",
+"    gr1->SetLineStyle(2);  // Dashed line",
+"    gr1->SetTitle(\"Annealing Cycle 1, raw single-layer\");",
+"    gr1->GetXaxis()->SetTitle(\"Hours\");",
+"    gr1->GetYaxis()->SetTitle(\"Temperature (^{#circ}C,\");",
+"",
+"    // Draw graph",
+"    gr1->Draw(\"AL\");  // \"A\" for axes, \"L\" for line",
+"",
+"    // Grid and legend",
+"    c1->SetGridx();",
+"    c1->SetGridy();",
+"    TLegend *legend = new TLegend(0.6, 0.7, 0.9, 0.9);",
+"    legend->AddEntry(gr1, \"Annealing cycle 1, raw single-layer\", \"l\");",
+"    legend->Draw();",
+"",
+"    // Show plot",
+"    c1->Update();",
+"    c1->Draw();",
+"}"]
+
+# Write strings to the .C file
+with open(filename_ROOTcode, "w") as file:
+    for line in rootCode_strings:
+        file.write(line + "\n")
+print(f"File '{filename_ROOTcode}' has been created.")
+
 #print("======================================================")
