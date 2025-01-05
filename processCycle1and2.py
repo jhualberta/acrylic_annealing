@@ -34,10 +34,11 @@ def find_closest_index( input_value, list_vals ):
     return idx
 
 def handle_cycleMode_1_2(inputdata):
-    run_mode = inputdata[0]
-    thickness = inputdata[1]
-    room_temp = inputdata[2]
-    cycle_choice = inputdata[3] 
+    run_mode   = inputdata[0]
+    thickness  = inputdata[1]
+    room_temp  = inputdata[2]
+    cycle_mode = inputdata[3] 
+    cycle_choice = str(cycle_mode) 
 
     current_dir = os.getcwd()
     file_name_15_1 = 'StachiwTable15_1.csv'
@@ -194,21 +195,6 @@ def handle_cycleMode_1_2(inputdata):
         else:
             return None
     
-    ### Stachiw bonded annealing
-    def stachiwCycle2(t):
-        if 0 <= t<= 10:
-            return 12*t + 20 ## 12C/hour
-        elif 10 < t <= 60:
-            return 140
-        elif 60 < t <= 85:
-            return 140 - 1.2*(t-60)
-        elif 85 < t <= 110:
-            return 110
-        elif 110 <= t < 160:
-            return 110 - 1.8*(t-110)
-        else:
-            return None
-    
     ### Stachiw machined annealing
     def stachiwCycle3(t):
         if 0 <= t<= 10:
@@ -227,10 +213,14 @@ def handle_cycleMode_1_2(inputdata):
     time_stachiwCycle3 = np.linspace(0, endTime, plotTimeStep)
     
     temperature_stachiwCycle1 = [stachiwCycle1(t) for t in time_stachiwCycle1]
-    temperature_stachiwCycle2 = [stachiwCycle2(t) for t in time_stachiwCycle2]
-    temperature_stachiwCycle3 = [stachiwCycle3(t) for t in time_stachiwCycle3]
     
-    plt.plot(time_stachiwCycle1, temperature_stachiwCycle1,linestyle='dashed', label="Annealing cycle 1, raw single-layer")
+    temperature_stachiwCycle3 = [stachiwCycle3(t) for t in time_stachiwCycle3]
+   
+    labelString = "Annealing cycle 1, single-layer sheet"
+    if cycle_mode == 2:
+        labelString = "Annealing cycle 2, laminated panel"
+
+    plt.plot(time_stachiwCycle1, temperature_stachiwCycle1,linestyle='dashed', label=labelString)
     plt.xlabel("hours")
     plt.ylabel(u"Temperature (\N{DEGREE SIGN}C) ")
     plt.grid(True, axis='x')
@@ -248,7 +238,10 @@ def handle_cycleMode_1_2(inputdata):
     ## print the curve
     print("insert the python codes below for plotting this curve:")
     print("======================================================")
-    print("def stachiwCycle1(t):")
+    print("import numpy as np")
+    print("from numpy import *")
+    print("import matplotlib.pyplot as plt")
+    print("def stachiwCycle(t):")
     print("    room_temp = %.f"%room_temp)
     print("    timeRegion1 = (140. - room_temp)/%.f"%heatingRate_degC)
     print("    timeRegion2 = timeRegion1 + %.f ## hold for %.f hours at 140degC"%(holdTime_at140degC,holdTime_at140degC))
@@ -268,19 +261,15 @@ def handle_cycleMode_1_2(inputdata):
     print("        return 110 + %.2f*(t-timeRegion4)"%max_coolingRate_to27degC)
     print("    else:")
     print("        return None")
-    print("")
+    print("actual_totaltime = %.2f"%actual_totaltime)
     print("endTime = int(actual_totaltime) + 10 # for plotting")
     print("plotTimeStep  = endTime*100")
-    print("time_stachiwCycle1 = np.linspace(0, endTime, plotTimeStep)")
-    print("time_stachiwCycle2 = np.linspace(0, endTime, plotTimeStep)")
-    print("time_stachiwCycle3 = np.linspace(0, endTime, plotTimeStep)")
-    print("temperature_stachiwCycle1 = [stachiwCycle1(t) for t in time_stachiwCycle1]")
-    print("temperature_stachiwCycle2 = [stachiwCycle2(t) for t in time_stachiwCycle2]")
-    print("temperature_stachiwCycle3 = [stachiwCycle3(t) for t in time_stachiwCycle3]")
+    print("time_stachiwCycle = np.linspace(0, endTime, plotTimeStep)")
+    print("temperature_stachiwCycle = [stachiwCycle(t) for t in time_stachiwCycle1]")
     print("")
-    print("plt.plot(time_stachiwCycle1, temperature_stachiwCycle1,linestyle=\'dashed\', label=\"Annealing cycle 1, raw single-layeri\")")
+    print("plt.plot(time_stachiwCycle, temperature_stachiwCycle,linestyle=\'dashed\', label=\"" + labelString + "\")")
     print("plt.xlabel(\"hours\")")
-    print("plt.ylabel(u\"Temperature (\N{DEGREE SIGN}C) \")")
+    print("plt.ylabel(u\"Temperature (\\N{DEGREE SIGN}C) \")")
     print("plt.grid(True, axis=\'x\')")
     print("plt.grid(True, axis=\'y\')")
     print("plt.legend()")
@@ -357,7 +346,7 @@ def handle_cycleMode_1_2(inputdata):
     "    c1->SetGridx();",
     "    c1->SetGridy();",
     "    TLegend *legend = new TLegend(0.6, 0.7, 0.9, 0.9);",
-    "    legend->AddEntry(gr1, \"Annealing cycle 1, raw single-layer\", \"l\");",
+    "    legend->AddEntry(gr1, \"" + labelString + "\", \"l\");",
     "    legend->Draw();",
     "",
     "    // Show plot",

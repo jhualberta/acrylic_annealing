@@ -37,7 +37,8 @@ def handle_cycleMode_3(inputdata):
     run_mode     = inputdata[0]
     thickness    = inputdata[1]
     room_temp    = inputdata[2]
-    cycle_choice = inputdata[3] 
+    cycle_mode   = inputdata[3] 
+    cycle_choice = str(cycle_mode) 
 
     current_dir     = os.getcwd()
     file_name_15_3B = 'StachiwTable15_3B.csv'
@@ -56,6 +57,7 @@ def handle_cycleMode_3(inputdata):
     list_thickness1       = df.iloc[:, 0].tolist()
     list_thickness2       = df.iloc[:, 1].tolist()
     list_max_heatingRate  = df.iloc[:, 2].tolist() # in fahrenheit
+    
     list_holdTime_110degC = df.iloc[:, 3].tolist() # in hour 
     list_holdTime_100degC = df.iloc[:, 4].tolist() # in hour 
     list_holdTime_90degC  = df.iloc[:, 5].tolist() # in hour 
@@ -89,20 +91,22 @@ def handle_cycleMode_3(inputdata):
     max_heatingRate = list_max_heatingRate[row_index] 
     max_heatingRate_degC = abs(fahrenheit_to_celsius_rate(max_heatingRate))
     max_heatingRate_degC_minutes = max_heatingRate_degC/60
-    
+
     suggest_heatingRate_degC = floor(max_heatingRate_degC/10)*10
-    
+
     #NOTE: our fast mode value is already lower than the maximum value
     fast_heatingRate_degC = floor(max_heatingRate_degC/2)*2
-    
+
     heatingRate_degC = suggest_heatingRate_degC
     if run_mode == 1:#use fast mode
         heatingRate_degC = fast_heatingRate_degC
     
-    min_risetime_to140degC   = list_min_risetime_to140degC[row_index]
     actual_risetime_to140degC = (140. - room_temp)/heatingRate_degC
     
-    holdTime_at140degC       = list_holdTime_at140degC[row_index]      
+    holdTime_at85degC = list_holdTime_at140degC[row_index]      
+    
+    
+    
     coolingRate_to230F       = list_coolingRate_to110degC[row_index]
     coolingRate_to110degC    = fahrenheit_to_celsius_rate(coolingRate_to230F) 
     decreasetime_to110degC   = list_decreasetime_to110degC[row_index]

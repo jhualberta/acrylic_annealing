@@ -97,7 +97,7 @@ def main():
     
     print("thickness is set to", thickness, "mm.")
     
-    inputdata = [run_mode, thickness, room_temp, cycle_choice]
+    inputdata = [run_mode, thickness, room_temp, cycle_mode]
     if cycle_mode != 3: 
         handle_cycleMode_1_2(inputdata)
     if cycle_mode == 3:
