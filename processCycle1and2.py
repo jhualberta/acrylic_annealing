@@ -266,10 +266,10 @@ def handle_cycleMode_1_2(inputdata):
     print("")
     
     print("======================================================")
-    print("insert the root C++ codes below for plotting this curve:")
+    print("save the root C++ codes below for plotting this curve:")
     print("======================================================")
     print("run the code by: root plotStachiwCycle.C")
-    # File name
+    # ROOT C++ file name
     filename_ROOTcode = "plotStachiwCycle.C"
     rootCode_strings = [ 
     "#include <iostream>",

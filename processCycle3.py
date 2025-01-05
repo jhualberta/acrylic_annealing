@@ -35,7 +35,7 @@ def find_closest_index( input_value, list_vals ):
     return idx
 
 def handle_cycleMode_3(inputdata):
-    print(inputdata)
+    #print(inputdata)
     run_mode     = inputdata[0]
     thickness    = inputdata[1]
     room_temp    = inputdata[2]
@@ -254,8 +254,9 @@ def handle_cycleMode_3(inputdata):
     print("import matplotlib.pyplot as plt")
     print("room_temp = %.f"%room_temp)
     print("max_temp = %.f"%max_temp)
+    print("holdTime =  %.f"%holdTime)
     print("suggest_heatingRate_degC = %.f"%suggest_heatingRate_degC) 
-    print("max_coolingRate_to27degC = %.f"%max_max_coolingRate_to27degC)
+    print("max_coolingRate_to27degC = %.f"%max_coolingRate_to27degC)
     print("def stachiwCycle3(t):")
     print("    timeRegion1 = (max_temp - room_temp)/suggest_heatingRate_degC #max_heatingRate_degC")
     print("    timeRegion2 = timeRegion1 + holdTime")
@@ -280,4 +281,87 @@ def handle_cycleMode_3(inputdata):
     print("plt.grid(True, axis=\'y\')")
     print("plt.legend()")
     print("plt.show()")
-    
+
+    print("======================================================")
+    print("save the root C++ codes below for plotting this curve:")
+    print("======================================================")
+    print("run the code by: root plotStachiwCycle3.C")
+    # ROOT C++ file name
+    filename_ROOTcode = "plotStachiwCycle3.C"
+    rootCode_strings = [
+    "#include <iostream>",
+    "#include <vector>",
+    "#include <cmath>",
+    "#include \"TCanvas.h\"",
+    "#include \"TGraph.h\"",
+    "#include \"TAxis.h\"",
+    "#include \"TLegend.h\"",
+    "",
+    "// Function to represent stachiwCycle",
+    "double room_temp = "+str(room_temp)+";",
+    "double max_temp = "+str(max_temp)+";",
+    "double holdTime = "+str(holdTime)+";",
+    "double suggest_heatingRate_degC = "+str(suggest_heatingRate_degC)+";",
+    "double max_coolingRate_to27degC = "+str(max_coolingRate_to27degC)+";",
+    "double stachiwCycle3(double t) {",
+    "    double timeRegion1 = (max_temp - room_temp)/suggest_heatingRate_degC;",
+    "    double timeRegion2 = timeRegion1 + holdTime;  // Hold for " + str(holdTime) + " hours at " + str(max_temp)+ "degC",
+    "    double timeRegion3 = timeRegion2 + (max_temp - room_temp)/max_coolingRate_to27degC;",
+    "",
+    "    if (0 <= t && t <= timeRegion1) {",
+    "        return " + str(heatingRate_degC) + "* t + room_temp;",
+    "    } else if (timeRegion1 < t && t <= timeRegion2) {",
+    "        return max_temp;",
+    "    } else if (timeRegion2 < t && t <= timeRegion3) {",
+    "        return max_temp + -1*max_coolingRate_to27degC*(t - timeRegion2);",
+    "    } else {",
+    "        return 0;  // Return 0 if t is out of bounds",
+    "    }",
+    "}",
+    "",
+    "void plotStachiwCycle3() {",
+    "    // Time vectors for the different cycles",
+    "    int endTime = " + str( int(actual_totaltime) ) + "; // total time",
+    "    int nPoints = endTime*100;",
+    "    std::vector<double> time_stachiwCycle3(nPoints);",
+    "    std::vector<double> temperature_stachiwCycle3(nPoints);",
+    "    ",
+    "    for (int i = 0; i < nPoints; ++i) {",
+    "        time_stachiwCycle3[i] = i*0.01;  // Fill the time values",
+    "        temperature_stachiwCycle3[i] = stachiwCycle3(time_stachiwCycle3[i]);",
+    "    }",
+    "",
+    "    // Create canvas",
+    "    TCanvas *c1 = new TCanvas(\"c1\", \"Annealing Cycle\", 800, 600);",
+    "",
+    "    // Create a graph",
+    "    TGraph *gr1 = new TGraph(nPoints, &time_stachiwCycle3[0], &temperature_stachiwCycle3[0]);",
+    "    gr1->SetLineColor(kGray+1);// Line color",
+    "    gr1->SetLineWidth(2);  // Line width",
+    "    gr1->SetLineStyle(3);  // Dashed line",
+    "    gr1->SetTitle(\"Annealing Cycle 3, laminated panel after machining\");",
+    "    gr1->GetXaxis()->SetTitle(\"Hours\");",
+    "    gr1->GetYaxis()->SetTitle(\"Temperature (^{#circ}C,\");",
+    "",
+    "    // Draw graph",
+    "    gr1->Draw(\"AL\");  // \"A\" for axes, \"L\" for line",
+    "",
+    "    // Grid and legend",
+    "    c1->SetGridx();",
+    "    c1->SetGridy();",
+    "    TLegend *legend = new TLegend(0.6, 0.7, 0.9, 0.9);",
+    "    legend->AddEntry(gr1, \"Annealing cycle3, laminated panel after machining\", \"l\");",
+    "    legend->Draw();",
+    "",
+    "    // Show plot",
+    "    c1->Update();",
+    "    c1->Draw();",
+    "}"]
+
+    # Write strings to the .C file
+    with open(filename_ROOTcode, "w") as file:
+        for line in rootCode_strings:
+            file.write(line + "\n")
+    print(f"File '{filename_ROOTcode}' has been created.")
+    #print("======================================================")
+
