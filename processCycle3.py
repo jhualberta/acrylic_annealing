@@ -34,27 +34,38 @@ def find_closest_index( input_value, list_vals ):
     return idx
 
 def handle_cycleMode_3(inputdata):
-    run_mode = inputdata[0]
-    thickness = inputdata[1]
-    current_dir = os.getcwd()
-    file_name_15_3 = 'StachiwTable15_3B.csv'
+    run_mode     = inputdata[0]
+    thickness    = inputdata[1]
+    room_temp    = inputdata[2]
+    cycle_choice = inputdata[3] 
+
+    current_dir     = os.getcwd()
+    file_name_15_3B = 'StachiwTable15_3B.csv'
     
-    file_path = os.path.join(current_dir, file_name_15_1)
+    file_path = os.path.join(current_dir, file_name_15_3B)
+    # Read the Excel file 15.3B, skipping the first 3 rows
+    df = pd.read_csv(file_path, skiprows=2, skipfooter=2,engine='python')
+    
+    ##NOTE: the cooling rate uses the rate in the Table 15.1 for cooling from 110 degC to room temperature
+    file_name_15_1 = 'StachiwTable15_1.csv'
+    file_path1 = os.path.join(current_dir, file_name_15_1)
     # Read the Excel file, skipping the first 3 rows
-    df = pd.read_csv(file_path, skiprows=2, skipfooter=3,engine='python')
+    df1 = pd.read_csv(file_path1, skiprows=2, skipfooter=3,engine='python')
+
+    #Load table 15.3B
+    list_thickness1       = df.iloc[:, 0].tolist()
+    list_thickness2       = df.iloc[:, 1].tolist()
+    list_max_heatingRate  = df.iloc[:, 2].tolist() # in fahrenheit
+    list_holdTime_110degC = df.iloc[:, 3].tolist() # in hour 
+    list_holdTime_100degC = df.iloc[:, 4].tolist() # in hour 
+    list_holdTime_90degC  = df.iloc[:, 5].tolist() # in hour 
+    list_holdTime_85degC  = df.iloc[:, 6].tolist() # in hour 
     
     #Load table 15.1
-    list_thickness = df.iloc[:, 1].tolist()
-    list_max_heatingRate = df.iloc[:, 2].tolist()
-    list_min_risetime_to140degC = df.iloc[:, 3].tolist()
-    list_holdTime_at140degC = df.iloc[:, 4].tolist() 
-    list_coolingRate_to110degC = df.iloc[:, 5].tolist()
-    list_decreasetime_to110degC = df.iloc[:, 6].tolist()
-    list_holdTime_at110degC = df.iloc[:, 7].tolist()
+    list_thickness_table1 = df.iloc[:, 1].tolist()
     list_max_coolingRate_to27degC = df.iloc[:, 8].tolist()
-    list_decreasetime_to27degC = df.iloc[:, 9].tolist()
-    list_totaltime = df.iloc[:, 10].tolist() 
-    n_data = len(list_thickness)
+    
+    n_data = len(list_thickness1)
     
     row_index = 0
     
