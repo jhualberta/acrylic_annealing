@@ -143,7 +143,7 @@ def handle_cycleMode_1_2(inputdata):
     print( str(round(holdTime_at140degC,2)) + " hours; or "+ str(round(holdTime_at140degC*60,2)) + " minutes.")
     print("------------------------------------------------------")
     print(u"Approx. cooling rate to 110 \N{DEGREE SIGN}C:")
-    print( str(round(coolingRate_to110degC,2)) + u"\N{DEGREE SIGN}C/hour; or " + str(round(coolingRate_to110degC/60,2)) + u"\N{DEGREE SIGN}C/minute") + "or " + str(round(coolingRate_to230F,2)) + u"\N{DEGREE SIGN}F/hour")
+    print( str(round(coolingRate_to110degC,2)) + u"\N{DEGREE SIGN}C/hour; or " + str(round(coolingRate_to110degC/60,2)) + u"\N{DEGREE SIGN}C/minute" + "or " + str(round(coolingRate_to230F,2)) + u"\N{DEGREE SIGN}F/hour")
     print("------------------------------------------------------")
     print(u"Hours to Cool oven to 110 \N{DEGREE SIGN}C:")
     print( str( round(decreasetime_to110degC,2))+ " hours; or "+ str(round(decreasetime_to110degC*60,2)) + " minutes")
@@ -152,7 +152,7 @@ def handle_cycleMode_1_2(inputdata):
     print( str(round(holdTime_at110degC,2)) + " hours")
     print("------------------------------------------------------")
     print(u"Max cooling rate to room temperature:")
-    print( str(round(max_coolingRate_to27degC,2)) + u"\N{DEGREE SIGN}C/hour; or " + str(round(max_coolingRate_to27degC/60,2)) + u"\N{DEGREE SIGN}C/minute") + "or "+str(round(max_coolingRate_to80F,2)) + u"\N{DEGREE SIGN}F/hour")
+    print( str(round(max_coolingRate_to27degC,2)) + u"\N{DEGREE SIGN}C/hour; or " + str(round(max_coolingRate_to27degC/60,2)) + u"\N{DEGREE SIGN}C/minute" + "or "+str(round(max_coolingRate_to80F,2)) + u"\N{DEGREE SIGN}F/hour")
     print("------------------------------------------------------")
     print("Time for cooling to room temperature: ")
     cooling_time = (110. - room_temp)/max_coolingRate_to27degC

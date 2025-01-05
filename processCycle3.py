@@ -190,10 +190,10 @@ def handle_cycleMode_3(inputdata):
     print("------------------------------------------------------")
     print("Time for cooling to room temperature: ")
     cooling_time = (110. - room_temp)/max_coolingRate_to27degC
-    print( str(round(cooling_time,2)) + " hours; or " + str(cooling_time*60) + " minutes.")
+    print( str(round(cooling_time,2)) + " hours; or " + str(round(cooling_time*60,2)) + " minutes.")
     print("------------------------------------------------------")
     print("Total time expected in Stachiw's table:")
-    print(str(totaltime) + " hours; or " + str( round(totaltime*60, 2) )+ " minutes.")
+    print(str( round(totaltime,2) ) + " hours; or " + str( round(totaltime*60, 2) )+ " minutes.")
     print("Total time suggested:")
     print(str(round(actual_totaltime,1)) + " hours; or " + str( np.ceil(actual_totaltime*60) )+ " minutes.")
     actual_days = actual_totaltime/24
@@ -221,7 +221,7 @@ def handle_cycleMode_3(inputdata):
         elif timeRegion1 < t <= timeRegion2: 
             return max_temp 
         elif timeRegion2 < t <= timeRegion3:
-            return max_temp - max_coolingRate_to27degC*(t-timeRegion3) 
+            return max_temp - max_coolingRate_to27degC*(t-timeRegion2) 
         else:
             return None
     
@@ -247,129 +247,37 @@ def handle_cycleMode_3(inputdata):
     plt.close()  # Close the plot to free up memory
     
     ## print the curve
-    #print("insert the python codes below for plotting this curve:")
-    #print("======================================================")
-    #print("def stachiwCycle1(t):")
-    #print("    room_temp = %.f"%room_temp)
-    #print("    timeRegion1 = (140. - room_temp)/%.f"%heatingRate_degC)
-    #print("    timeRegion2 = timeRegion1 + %.f ## hold for %.f hours at 140degC"%(holdTime_at140degC,holdTime_at140degC))
-    #print("    timeRegion3 = timeRegion2 + (140. - 110.)/abs(%.2f)"%coolingRate_to110degC)
-    #print("    timeRegion4 = timeRegion3 + %.f ## hold for %.f hours at 110degC"%(holdTime_at110degC,holdTime_at110degC))
-    #print("    timeRegion5 = timeRegion4 + (110. - room_temp)/abs(%.2f)"%max_coolingRate_to27degC)
-    #print("")
-    #print("    if 0 <= t<= timeRegion1:")
-    #print("        return %.2f*t + room_temp"%max_heatingRate_degC)
-    #print("    elif timeRegion1 < t <= timeRegion2:")
-    #print("        return 140")
-    #print("    elif timeRegion2 < t <= timeRegion3:")
-    #print("        return 140 + %.2f*(t-timeRegion2)"%coolingRate_to110degC)
-    #print("    elif timeRegion3 < t <= timeRegion4:")
-    #print("        return 110")
-    #print("    elif timeRegion4 <= t < timeRegion5:")
-    #print("        return 110 + %.2f*(t-timeRegion4)"%max_coolingRate_to27degC)
-    #print("    else:")
-    #print("        return None")
-    #print("")
-    #print("endTime = int(actual_totaltime) + 10 # for plotting")
-    #print("plotTimeStep  = endTime*100")
-    #print("time_stachiwCycle1 = np.linspace(0, endTime, plotTimeStep)")
-    #print("time_stachiwCycle2 = np.linspace(0, endTime, plotTimeStep)")
-    #print("time_stachiwCycle3 = np.linspace(0, endTime, plotTimeStep)")
-    #print("temperature_stachiwCycle1 = [stachiwCycle1(t) for t in time_stachiwCycle1]")
-    #print("temperature_stachiwCycle2 = [stachiwCycle2(t) for t in time_stachiwCycle2]")
-    #print("temperature_stachiwCycle3 = [stachiwCycle3(t) for t in time_stachiwCycle3]")
-    #print("")
-    #print("plt.plot(time_stachiwCycle1, temperature_stachiwCycle1,linestyle=\'dashed\', label=\"Annealing cycle 1, raw single-layeri\")")
-    #print("plt.xlabel(\"hours\")")
-    #print("plt.ylabel(u\"Temperature (\N{DEGREE SIGN}C) \")")
-    #print("plt.grid(True, axis=\'x\')")
-    #print("plt.grid(True, axis=\'y\')")
-    #print("plt.legend()")
-    #print("plt.show()")
-    #print("")
-    #
-    #print("======================================================")
-    #print("insert the root C++ codes below for plotting this curve:")
-    #print("======================================================")
-    #print("run the code by: root plotStachiwCycle.C")
-    ## File name
-    #filename_ROOTcode = "plotStachiwCycle.C"
-    #rootCode_strings = [ 
-    #"#include <iostream>",
-    #"#include <vector>",
-    #"#include <cmath>",
-    #"#include \"TCanvas.h\"",
-    #"#include \"TGraph.h\"",
-    #"#include \"TAxis.h\"",
-    #"#include \"TLegend.h\"",
-    #"",
-    #"// Function to represent stachiwCycle",
-    #"double stachiwCycle1(double t) {",
-    #"    double room_temp = "+ str(room_temp) + ";",
-    #"    double timeRegion1 = (140.0 - room_temp)/" + str(heatingRate_degC) + ";",
-    #"    double timeRegion2 = timeRegion1 + " + str(holdTime_at140degC) + ";  // Hold for " + str(holdTime_at140degC) + " hours at 140degC",
-    #"    double timeRegion3 = timeRegion2 + (140.0 - 110.0)/std::abs(" + str(coolingRate_to110degC) + ");",
-    #"    double timeRegion4 = timeRegion3 + " + str(holdTime_at110degC) +  ";   // Hold for " + str(holdTime_at110degC) + " hours at 110degC",
-    #"    double timeRegion5 = timeRegion4 + (110.0 - room_temp)/std::abs(" + str(max_coolingRate_to27degC) + ");",
-    #"",
-    #"    if (0 <= t && t <= timeRegion1) {",
-    #"        return " + str(heatingRate_degC) + "* t + room_temp;",
-    #"    } else if (timeRegion1 < t && t <= timeRegion2) {",
-    #"        return 140.0;",
-    #"    } else if (timeRegion2 < t && t <= timeRegion3) {",
-    #"        return 140.0 + -1*" + str(coolingRate_to110degC) + "*(t - timeRegion2);",
-    #"    } else if (timeRegion3 < t && t <= timeRegion4) {",
-    #"        return 110.0;",
-    #"    } else if (timeRegion4 <= t && t < timeRegion5) {",
-    #"        return 110.0 + -1*" + str(max_coolingRate_to27degC) + "*(t - timeRegion4);",
-    #"    } else {",
-    #"        return 0;  // Return 0 if t is out of bounds",
-    #"    }",
-    #"}",
-    #"",
-    #"void plotStachiwCycle() {",
-    #"    // Time vectors for the different cycles",
-    #"    int endTime = " + str( int(actual_totaltime) ) + "; // total time", 
-    #"    int nPoints = endTime*100;",
-    #"    std::vector<double> time_stachiwCycle1(nPoints);",
-    #"    std::vector<double> temperature_stachiwCycle1(nPoints);",
-    #"    ",
-    #"    for (int i = 0; i < nPoints; ++i) {",
-    #"        time_stachiwCycle1[i] = i*0.01;  // Fill the time values",
-    #"        temperature_stachiwCycle1[i] = stachiwCycle1(time_stachiwCycle1[i]);",
-    #"    }",
-    #"",
-    #"    // Create canvas",
-    #"    TCanvas *c1 = new TCanvas(\"c1\", \"Annealing Cycle\", 800, 600);",
-    #"",
-    #"    // Create a graph",
-    #"    TGraph *gr1 = new TGraph(nPoints, &time_stachiwCycle1[0], &temperature_stachiwCycle1[0]);",
-    #"    gr1->SetLineColor(kGray+1);// Line color",
-    #"    gr1->SetLineWidth(2);  // Line width",
-    #"    gr1->SetLineStyle(2);  // Dashed line",
-    #"    gr1->SetTitle(\"Annealing Cycle, raw single-layer\");",
-    #"    gr1->GetXaxis()->SetTitle(\"Hours\");",
-    #"    gr1->GetYaxis()->SetTitle(\"Temperature (^{#circ}C,\");",
-    #"",
-    #"    // Draw graph",
-    #"    gr1->Draw(\"AL\");  // \"A\" for axes, \"L\" for line",
-    #"",
-    #"    // Grid and legend",
-    #"    c1->SetGridx();",
-    #"    c1->SetGridy();",
-    #"    TLegend *legend = new TLegend(0.6, 0.7, 0.9, 0.9);",
-    #"    legend->AddEntry(gr1, \"Annealing cycle 1, raw single-layer\", \"l\");",
-    #"    legend->Draw();",
-    #"",
-    #"    // Show plot",
-    #"    c1->Update();",
-    #"    c1->Draw();",
-    #"}"]
-    #
-    ## Write strings to the .C file
-    #with open(filename_ROOTcode, "w") as file:
-    #    for line in rootCode_strings:
-    #        file.write(line + "\n")
-    #print(f"File '{filename_ROOTcode}' has been created.")
-    #
-    ##print("======================================================")
+    print("insert the python codes below for plotting this curve:")
+    print("======================================================")
+    print("import numpy as np")
+    print("from numpy import *")
+    print("import matplotlib.pyplot as plt")
+    print("room_temp = %.f"%room_temp)
+    print("max_temp = %.f"%max_temp)
+    print("suggest_heatingRate_degC = %.f"%suggest_heatingRate_degC) 
+    print("max_coolingRate_to27degC = %.f"%max_max_coolingRate_to27degC)
+    print("def stachiwCycle3(t):")
+    print("    timeRegion1 = (max_temp - room_temp)/suggest_heatingRate_degC #max_heatingRate_degC")
+    print("    timeRegion2 = timeRegion1 + holdTime")
+    print("    timeRegion3 = timeRegion2 + (max_temp - room_temp)/max_coolingRate_to27degC")
+    print("    if 0 <= t<= timeRegion1:")
+    print("        return suggest_heatingRate_degC*t + room_temp")
+    print("    elif timeRegion1 < t <= timeRegion2:")
+    print("        return max_temp")
+    print("    elif timeRegion2 < t <= timeRegion3:")
+    print("        return max_temp - max_coolingRate_to27degC*(t-timeRegion2)")
+    print("    else:")
+    print("        return None")
+    print("actual_totaltime = %.f"%actual_totaltime)
+    print("endTime = int(actual_totaltime) + 10 # for plotting")
+    print("plotTimeStep  = endTime*100")
+    print("time_stachiwCycle3 = np.linspace(0, endTime, plotTimeStep)")
+    print("temperature_stachiwCycle3 = [stachiwCycle3(t) for t in time_stachiwCycle3]")
+    print("plt.plot(time_stachiwCycle3, temperature_stachiwCycle3,linestyle=\'dashed\', label=\"Annealing cycle 3, laminated panel after machining\")")
+    print("plt.xlabel(\"hours\")")
+    print("plt.ylabel(u\"Temperature (\\N{DEGREE SIGN}C)\")")
+    print("plt.grid(True, axis=\'x\')")
+    print("plt.grid(True, axis=\'y\')")
+    print("plt.legend()")
+    print("plt.show()")
+    

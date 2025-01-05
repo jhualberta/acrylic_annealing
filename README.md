@@ -2,7 +2,7 @@
 Stachiw acrylic annealing
 
 # Prerequisite
-python version >= 3.10
+python version >= 3.6
 
 install necessary packages:
 ```
