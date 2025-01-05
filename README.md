@@ -28,8 +28,8 @@ Table 15.2 is for the thermal shrinking, not yet included.
 This file is saved here as a reference database, and a digitalized copy of the original tables from the book.
 Two pdf files are scanned copies from the book.
 
-The main program, readStachiwTable.py, reads the CSV file `StachiwTable15_1.csv`
-for the annealing cycle 1 and 2; and 
+The main program readStachiwTable.py, reads the CSV file `StachiwTable15_1.csv`
+for the annealing cycle 1 and 2; and `StachiwTable15_3B.csv` for the annealing cycle 3.
 
 # To run:
 `python3 readStachiwTable.py`
@@ -47,15 +47,15 @@ unit conversion:
 1 psi = 0.070 kg/cm2 = 6.89 kPa
 200 psi = 14 kg/cm2
 
-# Example and how it works:
+# Example to show how it works:
 ```
 *************************************
 Set mode (conservative or fast)
 ------- choose the mode carefully -------
 press 'enter': conservative mode (by default)
 press 'f': fast (energy-save) mode
-press:
-Use conservative mode (by default)
+press:f
+Set to fast mode. Warning: use the rate close to the maximum rate, be careful.
 *************************************
 Set the room/ambient temperature (27 °C as default):
 ------- choose the season -------
@@ -64,20 +64,60 @@ press 'a': spring/autumn (20°C)
 press 'b': summer (30°C)
 press 'c': winter (5°C)
 or enter a temperature value: (in °C)
-press:
-room temperature is set to 27°C by default
+press/enter:12
+room temperature is set to 12.0 °C.
 *************************************
 Set the annealing cycle
 ------- choose the cycle -------
 press 1: cycle 1 (table 15.1) NORMALIZING SCHEDULE FOR ACRYLIC CASTINGS, single-layer before machining)
-press 2: cycle 2 (
-press 3: cycle 3 (laminated-layer after machining)
+press 2: cycle 2 (same table 15.1) NORMALIZING SCHEDULE FOR ACRYLIC CASTINGS, laminated layers
+press 3: cycle 3 (table 15.3), laminated-layer after machining)
 press:1
-Enter acrylic thickness in mm: 50
-50.0mm is less than the minimum 50.8mm in Stachiw's database.
-Use the 50.8mm curve [definitely safe].
+!!! Now we are checking with the annealing cycle 1
+Enter acrylic thickness in mm: 120
 Note: we are using conservative curve (a thicker acrylic curve in data than input).
-Extract the curve for 50.8mm
+Extract the curve for 127.0mm
+!!!!! max_heatingRate_degC 16.111 suggested 10.0
+cooling-to-110degC: 1.667
+cooling-to-roomTemp: 2.5
+Note: the Stachiw's tables assume a default room temperature 27°C; here we use 12.0°C.
+----------------------------------------------------------------
+Max oven heating rate to 140°C (value in table):
+16.11°C/hour; or 0.27°C/minute or 29°F/hour
+Fast (energy-save) oven heating rate to 140°C:
+16.0°C/hour; or 0.27°C/minute or 28.8°F/hour
+----------------------------------
+Time for heating to 140 °C (value in table):
+7 hours; or 420 minutes
+Fast/energy save time for heating to 140°C:
+8.0 hours; or 480.0 minutes
+------------------------------------------------------
+Hold time at 140 °C:
+36 hours; or 2160 minutes
+------------------------------------------------------
+Approx. cooling rate to 110 °C:
+1.67°C/hour; or 0.03°C/minute
+or 3.0°F/hour
+------------------------------------------------------
+Hours to Cool oven to 110 °C:
+18 hours; or 1080 minutes
+------------------------------------------------------
+Hold time at 110 °C:
+18 hours
+------------------------------------------------------
+Max cooling rate to room temperature:
+2.5°C/hour; or 0.04°C/minute
+or 4.5°F/hour
+------------------------------------------------------
+Total time expected in Stachiw's table:
+112 hours; or 6720 minutes
+Total time suggested:
+124.0 hours; or 7440.0 minutes
+or 5 days and 4.0 hours.
+------------------------------------------------------
+Note1:Assume room temperature 80 °F (27 °C)
+Note2: The temperature of material removed from oven after completion of normalizing cycle cannot exceed the ambient room temperature by 15°F (8 °C)
+Note3: If the ambient temperature exceeds 80 °F the time to cool down  (category E) may be reduced by multiplying the temperature difference by the approximate cool down rate for the casting thickness and subtracting these hours from category E.
 ```
 
 
