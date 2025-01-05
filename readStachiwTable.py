@@ -28,14 +28,14 @@ def main():
     print("*************************************")
     print("Set mode (conservative or fast)") 
     print("------- choose the mode carefully -------")
-    print("press \'enter\': conservative mode (by default)") 
+    print("press \'enter\': conservative mode (default)") 
     print("press \'f\': fast (energy-save) mode")
     choice_mode = input("press:")
     run_mode = 0 # conservative mode by default
     if choice_mode == 'f':
        print("Set to fast mode. Warning: use the rate close to the maximum rate, be careful.")
        run_mode = 1
-    elif choice_mode =="":
+    elif choice_mode == "":
        print("Use conservative mode (by default)")
        run_mode = 0
     else:
@@ -45,10 +45,10 @@ def main():
     print("*************************************")
     print(u"Set the room/ambient temperature (27 \N{DEGREE SIGN}C as default):")
     print("------- choose the season -------")
-    print(u"press \'enter\': default (27\N{DEGREE SIGN}C)")
-    print(u"press \'a\': spring/autumn (20\N{DEGREE SIGN}C)")
-    print(u"press \'b\': summer (30\N{DEGREE SIGN}C)")
-    print(u"press \'c\': winter (5\N{DEGREE SIGN}C)")
+    print(u"press enter: default (27\N{DEGREE SIGN}C)")
+    print(u"press a: spring/autumn (20\N{DEGREE SIGN}C)")
+    print(u"press b: summer (30\N{DEGREE SIGN}C)")
+    print(u"press c: winter (5\N{DEGREE SIGN}C)")
     print(u"or enter a temperature value: (in \N{DEGREE SIGN}C)")
     choice_temp = input("press/enter:")
     room_temp = 27 ## default value
@@ -80,8 +80,20 @@ def main():
     print("press 3: cycle 3 (table 15.3B), laminated-layer after machining)") 
     
     cycle_choice = input("press:")
-    cycle_mode = int(cycle_choice)
-    
+    cycle_mode = 1
+    if cycle_choice == '1':
+        cycle_mode = 1
+    elif cycle_choice == '2':
+        cycle_mode = 2  
+    elif cycle_choice == '3':
+        cycle_mode = 3
+    else:
+        while True:
+            cycle_choice = input("Wrong input. Select a number: 1,2 or 3. Try again. Press:")
+            if( (cycle_choice == '1' or cycle_choice == '2' or cycle_choice == '3') ):
+                break
+        cycle_mode = int(cycle_choice)
+
     print("!!! Now we are checking with the annealing cycle "+str(cycle_mode))
     set_thickness = input("Enter acrylic thickness in mm:")
     while set_thickness=="":
@@ -92,8 +104,8 @@ def main():
     if thickness<0.0 or thickness>50000.0:
        print("Wrong thickness value, do you have such size oven? Range from 0 to 50 meter. Try again.")
        while thickness>50000.0 or thickness<0.0:
-           set_thickness = input("Enter acrylic thickness in mm:")
-           thickness = float(set_thickness) 
+          set_thickness = input("Enter acrylic thickness in mm:")
+          thickness = float(set_thickness) 
     
     print("thickness is set to", thickness, "mm.")
     

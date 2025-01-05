@@ -83,10 +83,10 @@ def handle_cycleMode_1_2(inputdata):
     max_heatingRate_degC = abs(fahrenheit_to_celsius_rate(max_heatingRate))
     max_heatingRate_degC_minutes = max_heatingRate_degC/60
     
-    suggest_heatingRate_degC = floor(max_heatingRate_degC/10)*10
+    suggest_heatingRate_degC = floor(max_heatingRate_degC)
     
     #NOTE: our fast mode value is already lower than the maximum value
-    fast_heatingRate_degC = floor(max_heatingRate_degC/2)*2
+    fast_heatingRate_degC = max_heatingRate_degC
     
     heatingRate_degC = suggest_heatingRate_degC
     if run_mode == 1:#use fast mode
@@ -108,7 +108,7 @@ def handle_cycleMode_1_2(inputdata):
     max_heatingRate_degC     = round(max_heatingRate_degC,3)
     coolingRate_to110degC    = round(coolingRate_to110degC,3)
     max_coolingRate_to27degC = round(max_coolingRate_to27degC,3)
-    print("!!!!! maxium heating rate is ", max_heatingRate_degC, "\N{DEGREE SIGN}C; suggested", suggest_heatingRate_degC, "\N{DEGREE SIGN}C")
+    print("!!!!! maximum heating rate is", round(max_heatingRate_degC,3), "\N{DEGREE SIGN}C/h; suggested/conservative:", suggest_heatingRate_degC, "\N{DEGREE SIGN}C/h")
     #print( 140. - room_temp, heatingRate_degC, actual_risetime_to140degC)
     print("cooling-to-110degC:", coolingRate_to110degC, "\N{DEGREE SIGN}C")
     print("cooling-to-roomTemp:", max_coolingRate_to27degC, "\N{DEGREE SIGN}C")
@@ -128,23 +128,22 @@ def handle_cycleMode_1_2(inputdata):
     print("----------------------------------")
     print(u"Time for heating to 140 \N{DEGREE SIGN}C (value in table):")
     #print (round(min_risetime_to140degC,2), round(min_risetime_to140degC*60,2))
-    print( str(round(min_risetime_to140degC,2)) + " hours; or " + str(round(min_risetime_to140degC*60,2)) + " minutes")
+    print( str(round(min_risetime_to140degC,2)) + " hours; or " + str(round(min_risetime_to140degC*60,2)) + " minutes.")
     
     if run_mode == 1:
         print(u"Fast/energy save time for heating to 140\N{DEGREE SIGN}C:")
     else:
         print(u"Suggested/conservative time for heating to 140\N{DEGREE SIGN}C:")
-    print(str(round(actual_risetime_to140degC,2)) + " hours; or " + str(round(actual_risetime_to140degC*60,2)) + " minutes")
+    print(str(round(actual_risetime_to140degC,2)) + " hours; or " + str(round(actual_risetime_to140degC*60,2)) + " minutes.")
     
     actual_totaltime = (140. - room_temp)/suggest_heatingRate_degC + holdTime_at140degC + (140. - 110.)/coolingRate_to110degC + holdTime_at110degC + (110. - room_temp)/max_coolingRate_to27degC
     
     print("------------------------------------------------------")
     print(u"Hold time at 140 \N{DEGREE SIGN}C:")
-    print( str(round(holdTime_at140degC,2)) + " hours; or "+ str(round(holdTime_at140degC*60,2)) + " minutes")
+    print( str(round(holdTime_at140degC,2)) + " hours; or "+ str(round(holdTime_at140degC*60,2)) + " minutes.")
     print("------------------------------------------------------")
     print(u"Approx. cooling rate to 110 \N{DEGREE SIGN}C:")
-    print( str(round(coolingRate_to110degC,2)) + u"\N{DEGREE SIGN}C/hour; or " + str(round(coolingRate_to110degC/60,2)) + u"\N{DEGREE SIGN}C/minute")
-    print( "or "+str(round(coolingRate_to230F,2)) + u"\N{DEGREE SIGN}F/hour")
+    print( str(round(coolingRate_to110degC,2)) + u"\N{DEGREE SIGN}C/hour; or " + str(round(coolingRate_to110degC/60,2)) + u"\N{DEGREE SIGN}C/minute") + "or " + str(round(coolingRate_to230F,2)) + u"\N{DEGREE SIGN}F/hour")
     print("------------------------------------------------------")
     print(u"Hours to Cool oven to 110 \N{DEGREE SIGN}C:")
     print( str( round(decreasetime_to110degC,2))+ " hours; or "+ str(round(decreasetime_to110degC*60,2)) + " minutes")
@@ -153,13 +152,16 @@ def handle_cycleMode_1_2(inputdata):
     print( str(round(holdTime_at110degC,2)) + " hours")
     print("------------------------------------------------------")
     print(u"Max cooling rate to room temperature:")
-    print( str(round(max_coolingRate_to27degC,2)) + u"\N{DEGREE SIGN}C/hour; or " + str(round(max_coolingRate_to27degC/60,2)) + u"\N{DEGREE SIGN}C/minute") 
-    print( "or "+str(round(max_coolingRate_to80F,2)) + u"\N{DEGREE SIGN}F/hour")
+    print( str(round(max_coolingRate_to27degC,2)) + u"\N{DEGREE SIGN}C/hour; or " + str(round(max_coolingRate_to27degC/60,2)) + u"\N{DEGREE SIGN}C/minute") + "or "+str(round(max_coolingRate_to80F,2)) + u"\N{DEGREE SIGN}F/hour")
+    print("------------------------------------------------------")
+    print("Time for cooling to room temperature: ")
+    cooling_time = (110. - room_temp)/max_coolingRate_to27degC
+    print( str(round(cooling_time,2)) + " hours; or " + str(cooling_time*60) + " minutes.")
     print("------------------------------------------------------")
     print("Total time expected in Stachiw's table:")
-    print(str(totaltime) + " hours; or " + str( round(totaltime*60, 2) )+ " minutes")
+    print(str(totaltime) + " hours; or " + str( round(totaltime*60, 2) )+ " minutes.")
     print("Total time suggested:")
-    print(str(round(actual_totaltime,1)) + " hours; or " + str( np.ceil(actual_totaltime*60) )+ " minutes")
+    print(str(round(actual_totaltime,1)) + " hours; or " + str( np.ceil(actual_totaltime*60) )+ " minutes.")
     actual_days = actual_totaltime/24
     if actual_totaltime>48:
         print("or " + str( int(actual_days) ) + " days and " + str( round(actual_totaltime - int(actual_days)*24, 1) ) + " hours.")

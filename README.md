@@ -50,7 +50,7 @@ unit conversion:
 ```
 
 fast/energy save mode: using the maximum heating and cooling rates provided in the book.
-default mode: is conservative, the heating and cooling rates are rounded to smaller values.
+default mode: is conservative mode, the heating and cooling rates are rounded to smaller values, or floor() number.
 
 # Example to show how it works:
 ```
