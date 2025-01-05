@@ -115,7 +115,7 @@ def handle_cycleMode_1_2(inputdata):
     
     print(u"Note: the Stachiw's tables assume a default room temperature 27\N{DEGREE SIGN}C; here we use "+ str(room_temp) + "\N{DEGREE SIGN}C.")
     print("----------------------------------------------------------------")
-    print(u"Max oven heating rate to 140\N{DEGREE SIGN}C (value in table):")
+    print(u"Max oven heating rate from room temperature to 140\N{DEGREE SIGN}C (value in table):")
     print( str(round(max_heatingRate_degC,2)) + u"\N{DEGREE SIGN}C/hour; or " + str(round(max_heatingRate_degC_minutes,2)) + u"\N{DEGREE SIGN}C/minute" 
     + " or "+str(round(max_heatingRate,2)) + u"\N{DEGREE SIGN}F/hour")
     if run_mode == 1:
@@ -195,17 +195,6 @@ def handle_cycleMode_1_2(inputdata):
         else:
             return None
     
-    ### Stachiw machined annealing
-    def stachiwCycle3(t):
-        if 0 <= t<= 10:
-            return 6.5*t + 20
-        elif 10 < t <= 81:
-            return 85
-        elif 81 < t <= 113:
-            return 85 - 2.0 * (t-81)
-        else:
-            return None
-    
     endTime = int(actual_totaltime) + 10 # for plotting 
     plotTimeStep  = endTime*100
     time_stachiwCycle1 = np.linspace(0, endTime, plotTimeStep)
@@ -214,8 +203,6 @@ def handle_cycleMode_1_2(inputdata):
     
     temperature_stachiwCycle1 = [stachiwCycle1(t) for t in time_stachiwCycle1]
     
-    temperature_stachiwCycle3 = [stachiwCycle3(t) for t in time_stachiwCycle3]
-   
     labelString = "Annealing cycle 1, single-layer sheet"
     if cycle_mode == 2:
         labelString = "Annealing cycle 2, laminated panel"
@@ -250,15 +237,15 @@ def handle_cycleMode_1_2(inputdata):
     print("    timeRegion5 = timeRegion4 + (110. - room_temp)/abs(%.2f)"%max_coolingRate_to27degC)
     print("")
     print("    if 0 <= t<= timeRegion1:")
-    print("        return %.2f*t + room_temp"%max_heatingRate_degC)
+    print("        return %.2f*t + room_temp"%heatingRate_degC)
     print("    elif timeRegion1 < t <= timeRegion2:")
     print("        return 140")
     print("    elif timeRegion2 < t <= timeRegion3:")
-    print("        return 140 + %.2f*(t-timeRegion2)"%coolingRate_to110degC)
+    print("        return 140 - %.2f*(t-timeRegion2)"%coolingRate_to110degC)
     print("    elif timeRegion3 < t <= timeRegion4:")
     print("        return 110")
     print("    elif timeRegion4 <= t < timeRegion5:")
-    print("        return 110 + %.2f*(t-timeRegion4)"%max_coolingRate_to27degC)
+    print("        return 110 - %.2f*(t-timeRegion4)"%max_coolingRate_to27degC)
     print("    else:")
     print("        return None")
     print("actual_totaltime = %.2f"%actual_totaltime)

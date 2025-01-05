@@ -89,9 +89,9 @@ def main():
         set_thickness = input("Enter acrylic thickness in mm:")
     
     thickness = float(set_thickness)    
-    if thickness<0.0 or thickness>1000000.0:
-       print("Wrong thickness value, try again. Range from 0 to 1000 meter.")
-       while thickness>1000000.0 or thickness<0.0:
+    if thickness<0.0 or thickness>50000.0:
+       print("Wrong thickness value, do you have such size oven? Range from 0 to 50 meter. Try again.")
+       while thickness>50000.0 or thickness<0.0:
            set_thickness = input("Enter acrylic thickness in mm:")
            thickness = float(set_thickness) 
     

@@ -206,43 +206,27 @@ def handle_cycleMode_3(inputdata):
         else:
             return None
     
-    ### Stachiw bonded annealing
-    def stachiwCycle2(t):
-        if 0 <= t<= 10:
-            return 12*t + 20 ## 12C/hour
-        elif 10 < t <= 60:
-            return 140
-        elif 60 < t <= 85:
-            return 140 - 1.2*(t-60)
-        elif 85 < t <= 110:
-            return 110
-        elif 110 <= t < 160:
-            return 110 - 1.8*(t-110)
-        else:
-            return None
-    
-    ### Stachiw machined annealing
     def stachiwCycle3(t):
-        if 0 <= t<= 10:
-            return 6.5*t + 20
-        elif 10 < t <= 81:
-            return 85
-        elif 81 < t <= 113:
-            return 85 - 2.0 * (t-81)
+        timeRegion1 = (max_temp - room_temp)/suggest_heatingRate_degC #max_heatingRate_degC
+        timeRegion2 = timeRegion1 + holdTime
+        timeRegion3 = timeRegion2 + (max_temp - room_temp)/max_coolingRate_to27degC 
+
+        if 0 <= t<= timeRegion1:
+            return suggest_heatingRate_degC*t + room_temp 
+        elif timeRegion1 < t <= timeRegion2: 
+            return max_temp 
+        elif timeRegion2 < t <= timeRegion3:
+            return max_temp - max_coolingRate_to27degC*(t-timeRegion3) 
         else:
             return None
     
     endTime = int(actual_totaltime) + 10 # for plotting 
     plotTimeStep  = endTime*100
-    time_stachiwCycle1 = np.linspace(0, endTime, plotTimeStep)
-    time_stachiwCycle2 = np.linspace(0, endTime, plotTimeStep)
     time_stachiwCycle3 = np.linspace(0, endTime, plotTimeStep)
     
-    temperature_stachiwCycle1 = [stachiwCycle1(t) for t in time_stachiwCycle1]
-    temperature_stachiwCycle2 = [stachiwCycle2(t) for t in time_stachiwCycle2]
     temperature_stachiwCycle3 = [stachiwCycle3(t) for t in time_stachiwCycle3]
     
-    plt.plot(time_stachiwCycle1, temperature_stachiwCycle1,linestyle='dashed', label="Annealing cycle 1, raw single-layer")
+    plt.plot(time_stachiwCycle3, temperature_stachiwCycle3,linestyle='dashed', label="Annealing cycle 3, laminated panel after machining")
     plt.xlabel("hours")
     plt.ylabel(u"Temperature (\N{DEGREE SIGN}C) ")
     plt.grid(True, axis='x')
@@ -250,7 +234,7 @@ def handle_cycleMode_3(inputdata):
     plt.legend()
     ####plt.xticks(rotation=45)
     #plt.tight_layout()
-    savePlotName = "annealingCyle" + cycle_choice + "_" + str(thickness).replace('.','p') + "mm_" + str(room_temp).replace('.','p') +"degC.jpg"
+    savePlotName = "annealingCyle3" + "_" + str(thickness).replace('.','p') + "mm_" + str(room_temp).replace('.','p') +"degC.jpg"
     # Save the plot to a JPG file
     #NOTE: change the plot resolution as needed
     #plt.savefig(savePlotName, format='jpg', dpi=200)  # dpi sets the resolution
