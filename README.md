@@ -32,18 +32,9 @@ Two pdf files are scanned copies from the book.
 The main program readStachiwTable.py, reads the CSV file `StachiwTable15_1.csv`
 for the annealing cycle 1 and 2; and `StachiwTable15_3B.csv` for the annealing cycle 3.
 
-Note for the annealing cycle 3, Stachiw suggests to heat up to 85 degC or 185 degF.
+Note for the annealing cycle 3, Stachiw suggests to heat up to 85 degC or 185 degF. There are other options but see the quotations below:
 
-Quoted from page 838:
-
-"As a rule, fabricators of acrylic components select 185 fahrenheit temperature for surface annealing
-
-since in most cases the castings from which the items were made were not previously normalized or shrunk. Annealing such 
-machined items at temperatures above 185 fahrenheit might induce some undesirable dimensional changes due to presence of 
-internal stresses that were not removed prior to machining by normalizing or shrinking thermal treatment.
-
-The drawback of using such a low annealing temperature is that the remaining residual stresses are probably somewhat higher than if the annealing was performed at 195°F."
-
+(Quoted from page 838) "As a rule, fabricators of acrylic components select 185 fahrenheit temperature for surface annealing since in most cases the castings from which the items were made were not previously normalized or shrunk. Annealing such machined items at temperatures above 185 fahrenheit might induce some undesirable dimensional changes due to presence of internal stresses that were not removed prior to machining by normalizing or shrinking thermal treatment. The drawback of using such a low annealing temperature is that the remaining residual stresses are probably somewhat higher than if the annealing was performed at 195°F."
 
 # To run:
 `python3 readStachiwTable.py`
