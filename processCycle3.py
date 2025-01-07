@@ -341,7 +341,7 @@ def handle_cycleMode_3(inputdata):
     "    gr1->SetLineStyle(3);  // Dashed line",
     "    gr1->SetTitle(\"Annealing Cycle 3, laminated panel after machining\");",
     "    gr1->GetXaxis()->SetTitle(\"Hours\");",
-    "    gr1->GetYaxis()->SetTitle(\"Temperature (^{#circ}C,\");",
+    "    gr1->GetYaxis()->SetTitle(\"Temperature (^{#circ}C),\");",
     "",
     "    // Draw graph",
     "    gr1->Draw(\"AL\");  // \"A\" for axes, \"L\" for line",
