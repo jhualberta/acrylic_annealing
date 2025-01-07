@@ -77,7 +77,7 @@ def main():
     print("------- choose the cycle -------")
     print("press 1: cycle 1 (table 15.1) NORMALIZING SCHEDULE FOR ACRYLIC CASTINGS, single-layer before machining)")
     print("press 2: cycle 2 (still table 15.1) NORMALIZING SCHEDULE FOR ACRYLIC CASTINGS, laminated layers")
-    print("press 3: cycle 3 (table 15.3B), laminated-layer after machining)") 
+    print("press 3: cycle 3 (table 15.3B) ANNEALING SCHEDULE FOR ACRYLIC WINDOWS, laminated-layer after machining)") 
     
     cycle_choice = input("press:")
     cycle_mode = 1

@@ -9,22 +9,22 @@
 // Function to represent stachiwCycle
 double stachiwCycle1(double t) {
     double room_temp = 27;
-    double timeRegion1 = (140.0 - room_temp)/3.3333333333333335;
-    double timeRegion2 = timeRegion1 + 178;  // Hold for 178 hours at 140degC
-    double timeRegion3 = timeRegion2 + (140.0 - 110.0)/std::abs(0.333);
-    double timeRegion4 = timeRegion3 + 89;   // Hold for 89 hours at 110degC
-    double timeRegion5 = timeRegion4 + (110.0 - room_temp)/std::abs(0.278);
+    double timeRegion1 = (140.0 - room_temp)/11.0;
+    double timeRegion2 = timeRegion1 + 50;  // Hold for 50 hours at 140degC
+    double timeRegion3 = timeRegion2 + (140.0 - 110.0)/std::abs(1.222);
+    double timeRegion4 = timeRegion3 + 25;   // Hold for 25 hours at 110degC
+    double timeRegion5 = timeRegion4 + (110.0 - room_temp)/std::abs(1.944);
 
     if (0 <= t && t <= timeRegion1) {
-        return 3.3333333333333335* t + room_temp;
+        return 11.0* t + room_temp;
     } else if (timeRegion1 < t && t <= timeRegion2) {
         return 140.0;
     } else if (timeRegion2 < t && t <= timeRegion3) {
-        return 140.0 + -1*0.333*(t - timeRegion2);
+        return 140.0 + -1*1.222*(t - timeRegion2);
     } else if (timeRegion3 < t && t <= timeRegion4) {
         return 110.0;
     } else if (timeRegion4 <= t && t < timeRegion5) {
-        return 110.0 + -1*0.278*(t - timeRegion4);
+        return 110.0 + -1*1.944*(t - timeRegion4);
     } else {
         return 0;  // Return 0 if t is out of bounds
     }
@@ -32,7 +32,7 @@ double stachiwCycle1(double t) {
 
 void plotStachiwCycle() {
     // Time vectors for the different cycles
-    int endTime = 693; // total time
+    int endTime = 152; // total time
     int nPoints = endTime*100;
     std::vector<double> time_stachiwCycle1(nPoints);
     std::vector<double> temperature_stachiwCycle1(nPoints);

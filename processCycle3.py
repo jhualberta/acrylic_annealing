@@ -11,6 +11,9 @@ inch_to_mm = 25.4 # mm/inch
 def fahrenheit_to_celsius(fahrenheit):
     return (fahrenheit - 32.)*5./9
 
+def celsius_to_fahrenheit(celsius):
+    return celsius*9./5 + 32.
+
 ### NOTE: for the temperature change, don't need to subtract 32*5./9 !!
 def fahrenheit_to_celsius_rate(fahrenheit):
     return (fahrenheit)*5./9
@@ -54,9 +57,10 @@ def handle_cycleMode_3(inputdata):
     file_path1 = os.path.join(current_dir, file_name_15_1)
     # Read the Excel file, skipping the first 3 rows
     df1 = pd.read_csv(file_path1, skiprows=2, skipfooter=3,engine='python')
-
+    print("======================================================================================================")
     print("!!! Important: For cycle 3, we heat the sample to 185\N{DEGREE SIGN}F (85\N{DEGREE SIGN}C) as default.")
     print("This is a conservative procedure and set as default. Make sure to select the proper heating target.")
+    print("See Stachiw Page 838 or README for details.")
     print("------- choose the heating target carefully -------")
     print("press enter: Heat to 185\N{DEGREE SIGN}F (85\N{DEGREE SIGN}C) (default)")
     print("press a: Heat to 230\N{DEGREE SIGN}F (110\N{DEGREE SIGN}C)")
@@ -74,9 +78,11 @@ def handle_cycleMode_3(inputdata):
     elif choice_heat == 'c':
        max_temp = 90  
     else:
-       print("Wrong input. Set to default 85 degC.")
+       print("Wrong input. Set to the default 85 degC.")
        max_temp = 85
     print("!!! Sample will be heated up to", max_temp, "\N{DEGREE SIGN}C.")
+
+    max_temp_degF = celsius_to_fahrenheit(max_temp) 
     #Load table 15.3B
     list_thickness1       = df.iloc[:, 0].tolist() # thickness range1
     list_thickness2       = df.iloc[:, 1].tolist() # thickness range2
@@ -121,11 +127,8 @@ def handle_cycleMode_3(inputdata):
                 row_index = row_index_range2
         row_index1 = find_closest_index(thickness, list_thickness_table1)
 
-    if is_conservative:
-        print("Note: we are using conservative curve (a thicker acrylic curve in data than input).")
-    
-    print("Extract the curve for "+ str( round(list_thickness1[row_index],1) ) + "mm") 
-
+    print("======================================================================================================")
+    print("Extract the curve for the thickness in the range", round(list_thickness1[row_index],1), "to", round(list_thickness2[row_index],1),"mm (", round(list_thickness1[row_index]/25.4,1),"to", round(list_thickness2[row_index]/25.4,1), "inches).")
     max_heatingRate = list_max_heatingRate[row_index]
     max_heatingRate_degC = abs(fahrenheit_to_celsius_rate(max_heatingRate)) # degF/hr to degC/hr
     max_heatingRate_degC_minutes = max_heatingRate_degC/60
@@ -153,26 +156,21 @@ def handle_cycleMode_3(inputdata):
     max_coolingRate_to27degC = fahrenheit_to_celsius_rate(max_coolingRate_to27degC_fahren)
     decreasetime_to27degC    = list_decreasetime_to27degC[row_index1]
     max_coolingRate_to27degC = round(max_coolingRate_to27degC,3)
-
-    print("!!!!! maximum heating rate is", max_heatingRate_degC, "\N{DEGREE SIGN}C/h; suggested", suggest_heatingRate_degC, "\N{DEGREE SIGN}C/h")
+    print(u"Note: the Stachiw's tables always assume a default room temperature 27\N{DEGREE SIGN}C; here we use ", str(room_temp),"\N{DEGREE SIGN}C.")
+    print("Be careful if the room temperature is very low.")
+    print("The oven is supposed to heat up to ", max_temp, u"\N{DEGREE SIGN}C or ", round(max_temp_degF,1), "\N{DEGREE SIGN}F.")
+    print("!!!!! Maximum heating rate is (value in Table 15.3B):")
     #print( 140. - room_temp, heatingRate_degC, actual_risetime)
-    print("cooling-to-roomTemp:", max_coolingRate_to27degC, "\N{DEGREE SIGN}C")
-    
-    print(u"Note: the Stachiw's tables assume a default room temperature 27\N{DEGREE SIGN}C; here we use "+ str(room_temp) + "\N{DEGREE SIGN}C.")
     print("----------------------------------------------------------------")
-    print(u"Max oven heating rate to 140\N{DEGREE SIGN}C (value in table):")
-    print( str(round(max_heatingRate_degC,2)) + u"\N{DEGREE SIGN}C/hour; or " + str(round(max_heatingRate_degC_minutes,2)) + u"\N{DEGREE SIGN}C/minute" 
-    + " or "+str(round(max_heatingRate,2)) + u"\N{DEGREE SIGN}F/hour")
+    print(round(max_heatingRate_degC,2), u"\N{DEGREE SIGN}C/hour; or ", round(max_heatingRate_degC_minutes,2), u"\N{DEGREE SIGN}C/minute or", round(max_heatingRate,2), u"\N{DEGREE SIGN}F/hour")
     if run_mode == 1:
-        print(u"Fast (energy-save) oven heating rate to 140\N{DEGREE SIGN}C:")
+        print(u"Fast (energy-save) oven heating rate to ", max_temp, "\N{DEGREE SIGN}C:")
     else:
-        print(u"Suggested conservative oven heating rate to 140\N{DEGREE SIGN}C:")
-    print( str(round(heatingRate_degC,2)) + u"\N{DEGREE SIGN}C/hour; or " + str(round(heatingRate_degC/60,2)) + u"\N{DEGREE SIGN}C/minute or "
-    + str(round( celsius_to_fahrenheit_rate(heatingRate_degC), 2)) + u"\N{DEGREE SIGN}F/hour" )
+        print(u"Suggested conservative oven heating rate to", max_temp, "\N{DEGREE SIGN}C:") 
+    print(round(heatingRate_degC,2),u"\N{DEGREE SIGN}C/hour; or ", round(heatingRate_degC/60,2), u"\N{DEGREE SIGN}C/minute or", round( celsius_to_fahrenheit_rate(heatingRate_degC), 2), u"\N{DEGREE SIGN}F/hour" )
     
     print("----------------------------------")
-    print(u"Time for heating to " + str(max_temp) +"\N{DEGREE SIGN}C (value in table):")
-    
+    print(u"Time for heating to ", str(max_temp), "\N{DEGREE SIGN}C (value in table):")
     if run_mode == 1:
         print(u"Fast/energy save time for heating to " + str(max_temp) + "\N{DEGREE SIGN}C:")
     else:
@@ -187,10 +185,8 @@ def handle_cycleMode_3(inputdata):
     print("------------------------------------------------------")
     print(u"Max cooling rate to room temperature:")
     print( str(round(max_coolingRate_to27degC,2)) + u"\N{DEGREE SIGN}C/hour; or " + str(round(max_coolingRate_to27degC/60,2)) + u"\N{DEGREE SIGN}C/minute or "+str(round(max_coolingRate_to27degC_fahren,2)) + u"\N{DEGREE SIGN}F/hour")
-    print("------------------------------------------------------")
-    print("Time for cooling to room temperature: ")
-    cooling_time = (110. - room_temp)/max_coolingRate_to27degC
-    print( str(round(cooling_time,2)) + " hours; or " + str(round(cooling_time*60,2)) + " minutes.")
+    cooling_time = (max_temp - room_temp)/max_coolingRate_to27degC
+    print("Time for cooling to room temperature: " + str(round(cooling_time,2)) + " hours; or " + str(round(cooling_time*60,2)) + " minutes.")
     print("------------------------------------------------------")
     print("Total time expected in Stachiw's table:")
     print(str( round(totaltime,2) ) + " hours; or " + str( round(totaltime*60, 2) )+ " minutes.")
