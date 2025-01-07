@@ -108,23 +108,22 @@ def handle_cycleMode_1_2(inputdata):
     max_heatingRate_degC     = round(max_heatingRate_degC,3)
     coolingRate_to110degC    = round(coolingRate_to110degC,3)
     max_coolingRate_to27degC = round(max_coolingRate_to27degC,3)
-    print("!!!!! maximum heating rate is", round(max_heatingRate_degC,3), "\N{DEGREE SIGN}C/h; suggested/conservative:", suggest_heatingRate_degC, "\N{DEGREE SIGN}C/h")
+    #print("!!!!! maximum heating rate is", round(max_heatingRate_degC,3), "\N{DEGREE SIGN}C/h; suggested/conservative:", suggest_heatingRate_degC, "\N{DEGREE SIGN}C/h")
     #print( 140. - room_temp, heatingRate_degC, actual_risetime_to140degC)
-    print("cooling-to-110degC:", coolingRate_to110degC, "\N{DEGREE SIGN}C")
-    print("cooling-to-roomTemp:", max_coolingRate_to27degC, "\N{DEGREE SIGN}C")
-    
+    #print("cooling-to-110degC:", coolingRate_to110degC, "\N{DEGREE SIGN}C")
+    #print("cooling-to-roomTemp:", max_coolingRate_to27degC, "\N{DEGREE SIGN}C")
     print(u"Note: the Stachiw's tables assume a default room temperature 27\N{DEGREE SIGN}C; here we use "+ str(room_temp) + "\N{DEGREE SIGN}C.")
-    print("----------------------------------------------------------------")
-    print(u"Max oven heating rate from room temperature to 140\N{DEGREE SIGN}C (value in table):")
+    print("=========================================================================================")
+    print(u"Maximum oven heating rate from room temperature to 140\N{DEGREE SIGN}C (value in table):")
     print( str(round(max_heatingRate_degC,2)) + u"\N{DEGREE SIGN}C/hour; or " + str(round(max_heatingRate_degC_minutes,2)) + u"\N{DEGREE SIGN}C/minute" 
     + " or "+str(round(max_heatingRate,2)) + u"\N{DEGREE SIGN}F/hour")
+    print("Warning: never faster than this rate!")
     if run_mode == 1:
         print(u"Fast (energy-save) oven heating rate to 140\N{DEGREE SIGN}C:")
     else:
         print(u"Suggested conservative oven heating rate to 140\N{DEGREE SIGN}C:")
     print( str(round(heatingRate_degC,2)) + u"\N{DEGREE SIGN}C/hour; or " + str(round(heatingRate_degC/60,2)) + u"\N{DEGREE SIGN}C/minute or "
     + str(round( celsius_to_fahrenheit_rate(heatingRate_degC), 2)) + u"\N{DEGREE SIGN}F/hour" )
-    
     print("------------------------------------------------------")
     print(u"Time for heating to 140 \N{DEGREE SIGN}C (value in table):")
     #print (round(min_risetime_to140degC,2), round(min_risetime_to140degC*60,2))

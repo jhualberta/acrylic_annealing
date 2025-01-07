@@ -163,6 +163,7 @@ def handle_cycleMode_3(inputdata):
     #print( 140. - room_temp, heatingRate_degC, actual_risetime)
     print("----------------------------------------------------------------")
     print(round(max_heatingRate_degC,2), u"\N{DEGREE SIGN}C/hour; or ", round(max_heatingRate_degC_minutes,2), u"\N{DEGREE SIGN}C/minute or", round(max_heatingRate,2), u"\N{DEGREE SIGN}F/hour")
+    print("Warning: never faster than this rate!")
     if run_mode == 1:
         print(u"Fast (energy-save) oven heating rate to ", max_temp, "\N{DEGREE SIGN}C:")
     else:

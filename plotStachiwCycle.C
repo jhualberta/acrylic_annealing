@@ -9,22 +9,22 @@
 // Function to represent stachiwCycle
 double stachiwCycle1(double t) {
     double room_temp = 27;
-    double timeRegion1 = (140.0 - room_temp)/11.0;
-    double timeRegion2 = timeRegion1 + 50;  // Hold for 50 hours at 140degC
-    double timeRegion3 = timeRegion2 + (140.0 - 110.0)/std::abs(1.222);
-    double timeRegion4 = timeRegion3 + 25;   // Hold for 25 hours at 110degC
-    double timeRegion5 = timeRegion4 + (110.0 - room_temp)/std::abs(1.944);
+    double timeRegion1 = (140.0 - room_temp)/37.0;
+    double timeRegion2 = timeRegion1 + 14;  // Hold for 14 hours at 140degC
+    double timeRegion3 = timeRegion2 + (140.0 - 110.0)/std::abs(4.444);
+    double timeRegion4 = timeRegion3 + 7;   // Hold for 7 hours at 110degC
+    double timeRegion5 = timeRegion4 + (110.0 - room_temp)/std::abs(5.556);
 
     if (0 <= t && t <= timeRegion1) {
-        return 11.0* t + room_temp;
+        return 37.0* t + room_temp;
     } else if (timeRegion1 < t && t <= timeRegion2) {
         return 140.0;
     } else if (timeRegion2 < t && t <= timeRegion3) {
-        return 140.0 + -1*1.222*(t - timeRegion2);
+        return 140.0 + -1*4.444*(t - timeRegion2);
     } else if (timeRegion3 < t && t <= timeRegion4) {
         return 110.0;
     } else if (timeRegion4 <= t && t < timeRegion5) {
-        return 110.0 + -1*1.944*(t - timeRegion4);
+        return 110.0 + -1*5.556*(t - timeRegion4);
     } else {
         return 0;  // Return 0 if t is out of bounds
     }
@@ -32,7 +32,7 @@ double stachiwCycle1(double t) {
 
 void plotStachiwCycle() {
     // Time vectors for the different cycles
-    int endTime = 152; // total time
+    int endTime = 45; // total time
     int nPoints = endTime*100;
     std::vector<double> time_stachiwCycle1(nPoints);
     std::vector<double> temperature_stachiwCycle1(nPoints);
@@ -61,7 +61,7 @@ void plotStachiwCycle() {
     c1->SetGridx();
     c1->SetGridy();
     TLegend *legend = new TLegend(0.6, 0.7, 0.9, 0.9);
-    legend->AddEntry(gr1, "Annealing cycle 1, single-layer sheet", "l");
+    legend->AddEntry(gr1, "Annealing cycle 2, laminated panel", "l");
     legend->Draw();
 
     // Show plot
