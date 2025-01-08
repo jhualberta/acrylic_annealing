@@ -130,8 +130,8 @@ Note2: The temperature of material removed from oven after completion of normali
 Note3: If the ambient temperature exceeds 80 °F the time to cool down  (category E) may be reduced by multiplying the temperature difference by the approximate cool down rate for the casting thickness and subtracting these hours from category E.
 ```
 
+# Updates
 
+Please create issues if anything doesn't work.
 
-
-
-
+A "worker-understandable" schedule table, which shows every steps in a time order, can be added in future.
